@@ -10,6 +10,10 @@ package grafica;
  */
 public class Sistema {
     public static void main(String[] args) {
+        // para los colores de los simbolos
+        String rojo = "\033[31m";
+        String azul = "\033[34m";
+        
         // Crear un tablero de ejemplo (puedes sustituirlo con tu lógica)
         String[][] tablero = {
             {"/", "\\", "-", "|", "/", "\\", "-", "|", "\\"},
