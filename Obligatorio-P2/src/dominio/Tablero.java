@@ -4,6 +4,10 @@
  */
 package dominio;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
+
 /**
  *
  * @author User
@@ -44,41 +48,86 @@ public class Tablero {
         
     }
     
-    public void generarAleatorio(int dificultad) {
+    public static String[][] tableroAleatorio(int dificultad) {
+        String pipeAzul = "\033[34m" + "| " + "\033[0m";
+        String pipeRojo = "\033[31m" + "| " + "\033[0m";
         
+        String guionAzul = "\033[34m" + "- " + "\033[0m";
+        String guionRojo = "\033[31m" + "- " + "\033[0m";
+        
+        String diagonalDerechaAzul = "\033[34m" + "/ " + "\033[0m";
+        String diagonalDerechaRojo = "\033[31m" + "/ " + "\033[0m";
+        
+        String diagonalIzquierdaAzul = "\033[34m" + "\\ " + "\033[0m";
+        String diagonalIzquierdaRojo = "\033[31m" + "\\ " + "\033[0m";
+        
+         String[][] tablero = {
+            {pipeAzul, pipeAzul, guionRojo, diagonalDerechaAzul, pipeRojo, guionRojo},
+            {guionRojo , diagonalDerechaAzul, diagonalDerechaAzul, pipeAzul, guionRojo, guionRojo},
+            {guionRojo, guionRojo, pipeAzul, guionRojo, diagonalDerechaRojo, guionRojo},
+            {diagonalIzquierdaRojo, guionRojo, pipeRojo, diagonalIzquierdaRojo, pipeAzul, pipeRojo},
+            {diagonalIzquierdaRojo, diagonalDerechaRojo, diagonalDerechaRojo, pipeAzul, diagonalDerechaAzul, diagonalIzquierdaAzul},
+        };
+        return tablero;
     }
     
-    public void llenarTablero() { // copilot
-        
-        for (int i = 0; i < this.filas; i++) {
-            for (int j = 0; j < this.columnas ; j++) {
-                int random = (int) (Math.random() * 2);
-                if (random == 0) {
-                    int random2 = (int) (Math.random() * 4);
-                    if (random2 == 0) {
-                        this.tablerito[i][j] = "R/";
-                    } else if (random2 == 1) {
-                        this.tablerito[i][j] = "R\\";
-                    } else if (random2 == 2) {
-                        this.tablerito[i][j] = "R|";
-                    } else if (random2 == 3) {
-                        this.tablerito[i][j] = "R-";
+   public static String[][] tableroDesdeArchivo() throws FileNotFoundException {
+            // Abrir el archivo "datos.txt" para lectura
+            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+
+            // Leer las dimensiones del tablero (m filas x n columnas)
+            int m = input.nextInt();
+            int n = input.nextInt();
+            input.nextLine(); // Leer el salto de línea después de las dimensiones
+
+            // Crear el tablero con las dimensiones especificadas
+            String[][] tablero = new String[m][n];
+            // Leer el contenido del tablero y asignar colores
+            for (int fila = 0; fila < m; fila++) {
+                String filaTablero = input.nextLine();
+                String[] simbolos = filaTablero.split(" "); // Divide la fila en símbolos
+                
+                for (int columna = 0; columna < n; columna++) {
+                    String simbolo = simbolos[columna]; 
+                    
+                    // Asignar color según el símbolo (R para rojo, A para azul)
+                    String color = "";
+                    if (simbolo.contains("R")) {
+                        color = "\u001B[31m"; // Rojo
+                    } else if (simbolo.contains("A")) {
+                        color = "\u001B[34m"; // Azul
                     }
-                } else if (random == 1) {
-                    int random2 = (int) (Math.random() * 4);
-                    if (random2 == 0) {
-                        this.tablerito[i][j] = "A/";
-                    } else if (random2 == 1) {
-                        this.tablerito[i][j] = "A\\";
-                    } else if (random2 == 2) {
-                        this.tablerito[i][j] = "A|";
-                    } else if (random2 == 3) {
-                        this.tablerito[i][j] = "A-";
-                    }
+                    
+                    // Agregar el símbolo al tablero con el color correspondiente
+                    tablero[fila][columna] = color + simbolo.charAt(0) + "\u001B[0m" + " "; // Resetear color
                 }
             }
-        }
+            int nivel = input.nextInt();
+            // Cerrar el archivo
+            input.close();
+            return tablero;
     }
     
-    
+    public static String[][] tableroPredefinido() {        
+        String pipeAzul = "\033[34m" + "| " + "\033[0m";
+        String pipeRojo = "\033[31m" + "| " + "\033[0m";
+        
+        String guionAzul = "\033[34m" + "- " + "\033[0m";
+        String guionRojo = "\033[31m" + "- " + "\033[0m";
+        
+        String diagonalDerechaAzul = "\033[34m" + "/ " + "\033[0m";
+        String diagonalDerechaRojo = "\033[31m" + "/ " + "\033[0m";
+        
+        String diagonalIzquierdaAzul = "\033[34m" + "\\ " + "\033[0m";
+        String diagonalIzquierdaRojo = "\033[31m" + "\\ " + "\033[0m";
+        
+        String[][] tablero = {
+            {pipeAzul, pipeAzul, guionRojo, diagonalDerechaAzul, pipeRojo, guionRojo},
+            {guionRojo , diagonalDerechaAzul, diagonalDerechaAzul, pipeAzul, guionRojo, guionRojo},
+            {guionRojo, guionRojo, pipeAzul, guionRojo, diagonalDerechaRojo, guionRojo},
+            {diagonalIzquierdaRojo, guionRojo, pipeRojo, diagonalIzquierdaRojo, pipeAzul, pipeRojo},
+            {diagonalIzquierdaRojo, diagonalDerechaRojo, diagonalDerechaRojo, pipeAzul, diagonalDerechaAzul, diagonalIzquierdaAzul},
+        };
+        return tablero;
+    }
 }

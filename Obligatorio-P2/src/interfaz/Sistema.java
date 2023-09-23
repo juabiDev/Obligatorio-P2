@@ -5,30 +5,49 @@
 package interfaz;
 
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import dominio.*;
 /**
  *
  * @author User
  */
 public class Sistema {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Scanner scanner = new Scanner(System.in);
         ConsolaSoliflips consola = new ConsolaSoliflips();
+        Juego juego = new Juego();
+        Tablero tablero = new Tablero();
         
         boolean jugar = true;
 
+        /* Faltaria logica de empezar juego, o sea, mostras el tablero, unas mini instrucciones con menu, y 
+        pedimos movimiento, lo ejecutamos, lo guardamos, etc.
+        !! Tablero aleatorio 
+        */
+        
         while (jugar) {
             consola.mostrarMenuPrincipal();
             String opcion = scanner.nextLine();
-
+            juego.iniciarJuego();
             switch (opcion.toLowerCase()) {
                 case "a":
-                    //lógica para cargar datos desde 'datos.txt'
+                    String[][] tabArch = juego.obtenerTableroDeArchivo();
+                    consola.imprimirTablero(tabArch);
+                    jugar = false;
                     break;
                 case "b":
-                    //lógica para usar el tablero predefinido
+                    String[][] tabPre = juego.obtenerTableroPredefinido();
+                    consola.imprimirTablero(tabPre);
+                    jugar = false;
                     break;
                 case "c":
-                    //lógica para generar un tablero aleatorio resoluble
+                    Scanner in = new Scanner(System.in);
+                    System.out.println("Ingrese nivel: ");
+                    int nivel = in.nextInt();
+                    String[][] tabAle = juego.obtenerTableroAleatorio(nivel);
+                    consola.imprimirTablero(tabAle);
+                    jugar = false;
                     break;
                 case "x":
                     jugar = false;
@@ -39,59 +58,5 @@ public class Sistema {
                     break;
             }
         }
-    
-        // Crear un tablero de ejemplo (puedes sustituirlo con tu lógica)
-        String[][] tablero = {
-            {"/", "\\", "-", "|", "/", "\\", "-", "|", "\\"},
-            {"|", "-", "\\", "/", "|", "\\", "-", "/", "|"},
-            {"\\", "/", "|", "-", "\\", "/", "|", "-", "\\"},
-            {"-", "|", "/", "\\", "-", "|", "/", "\\", "-"},
-            {"|", "\\", "-", "/", "|", "\\", "-", "/", "|"}
-        };
-
-        // Imprimir el tablero con números de fila y columna
-        imprimirTablero(tablero);
-    }
-
-    public static void imprimirTablero(String[][] tablero) {
-        int filas = tablero.length;
-        int columnas = tablero[0].length;
-
-        // Encontrar la longitud del número de columna más largo
-        int longitudNumero = String.valueOf(columnas).length();
-
-        // Imprimir números de columna
-        System.out.print(" ");
-        for (int i = 1; i <= columnas; i++) {
-            String columnaFormateada = String.format("%-" + longitudNumero + "s", i);
-            System.out.print("   " + columnaFormateada);
-        }
-        System.out.println(); // Cambiar de línea después de los números de columna
-
-        for (int fila = 0; fila < filas; fila++) {
-            // Imprimir línea superior de la celda
-            System.out.print("  +");
-            for (int columna = 0; columna < columnas; columna++) {
-                System.out.print("---+");
-            }
-            System.out.println(); // Final de la línea superior de la celda
-            
-            // Imprimir contenido de la celda
-            String numeroFila = String.valueOf(fila + 1);
-            String filaFormateada = String.format("%-" + longitudNumero + "s", numeroFila);
-            System.out.print(filaFormateada + " ");
-            for (int columna = 0; columna < columnas; columna++) {
-                String simboloFormateado = String.format("%-2s", tablero[fila][columna]);
-                System.out.print("| " + simboloFormateado);
-            }
-            System.out.println("|"); // Final de la línea de contenido de la celda
-        }
-
-        // Imprimir línea inferior de la matriz
-        System.out.print("  +");
-        for (int columna = 0; columna < columnas; columna++) {
-            System.out.print("---+");
-        }
-        System.out.println(); // Final de la línea inferior de la matriz
     }
 }

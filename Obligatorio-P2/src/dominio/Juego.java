@@ -4,8 +4,7 @@
  */
 package dominio;
 
-import java.security.Timestamp;
-import java.util.ArrayList;
+import java.io.FileNotFoundException;
 
 /**
  *
@@ -17,7 +16,6 @@ public class Juego {
     private long tiempoInicio;
     private long tiempoFin;
     
-    
     public Juego() {
         this.tablero = new Tablero();
         this.historialMovimientos = new HistorialMov();
@@ -26,7 +24,7 @@ public class Juego {
     }
     
     public void iniciarJuego() {
-        
+        tiempoInicio = System.currentTimeMillis();
     }
     
     public void realizarMovimiento(Movimiento m) {
@@ -43,5 +41,17 @@ public class Juego {
 
     public void guardarHistorial(Movimiento m) {
         
+    }
+    
+    public String[][] obtenerTableroDeArchivo() throws FileNotFoundException {
+        return tablero.tableroDesdeArchivo();
+    }
+    
+    public String[][] obtenerTableroAleatorio(int unaDificultad) {
+        return tablero.tableroAleatorio(unaDificultad);
+    }
+    
+    public String[][] obtenerTableroPredefinido() {
+        return tablero.tableroPredefinido();
     }
 }
