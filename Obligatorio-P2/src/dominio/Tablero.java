@@ -48,6 +48,14 @@ public class Tablero {
         
     }
     
+    public void setTablerito(String[][] untablero) {
+        this.tablerito = untablero;
+    }
+    
+    public String[][] getTablerito() {
+        return this.tablerito;
+    }
+    
     public static String[][] tableroAleatorio(int dificultad) {
         String pipeAzul = "\033[34m" + "| " + "\033[0m";
         String pipeRojo = "\033[31m" + "| " + "\033[0m";
@@ -71,9 +79,9 @@ public class Tablero {
         return tablero;
     }
     
-   public static String[][] tableroDesdeArchivo() throws FileNotFoundException {
+   public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();
@@ -90,22 +98,19 @@ public class Tablero {
                 for (int columna = 0; columna < n; columna++) {
                     String simbolo = simbolos[columna]; 
                     
-                    // Asignar color según el símbolo (R para rojo, A para azul)
-                    String color = "";
-                    if (simbolo.contains("R")) {
-                        color = "\u001B[31m"; // Rojo
-                    } else if (simbolo.contains("A")) {
-                        color = "\u001B[34m"; // Azul
-                    }
                     
                     // Agregar el símbolo al tablero con el color correspondiente
-                    tablero[fila][columna] = color + simbolo.charAt(0) + "\u001B[0m" + " "; // Resetear color
+                    tablero[fila][columna] = simbolo; // Resetear color
                 }
             }
             int nivel = input.nextInt();
             // Cerrar el archivo
             input.close();
-            return tablero;
+            
+            Tablero t = new Tablero(m, n, nivel);
+            t.setTablerito(tablero);
+            
+            return t;
     }
     
     public static String[][] tableroPredefinido() {        
@@ -130,4 +135,5 @@ public class Tablero {
         };
         return tablero;
     }
+ 
 }

@@ -15,7 +15,6 @@ public class ConsolaSoliflips {
         System.out.println("a) Cargar datos desde 'datos.txt'");
         System.out.println("b) Usar el tablero predefinido");
         System.out.println("c) Generar un tablero aleatorio resoluble");
-        System.out.println("x) Salir del juego");
         System.out.print("Opción: ");
     }
     
@@ -63,6 +62,7 @@ public class ConsolaSoliflips {
     
      public void mostrarSubMenu() {
         System.out.println("Seleccione una opción:");
+        System.out.println("M) Realizar movimiento fila columna");
         System.out.println("X) Terminar este juego");
         System.out.println("H) Mostrar historial de movimientos (fila, columna)");
         System.out.println("S) Mostrar solución");

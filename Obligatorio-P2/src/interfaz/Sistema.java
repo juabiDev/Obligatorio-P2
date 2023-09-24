@@ -17,9 +17,9 @@ public class Sistema {
         Scanner scanner = new Scanner(System.in);
         ConsolaSoliflips consola = new ConsolaSoliflips();
         Juego juego = new Juego();
-        Tablero tablero = new Tablero();
         
         boolean jugar = true;
+        boolean enJuego = true; // la vamos a ir controlando a medida que el usuario hace un movimiento
 
         /* Faltaria logica de empezar juego, o sea, mostras el tablero, unas mini instrucciones con menu, y 
         pedimos movimiento, lo ejecutamos, lo guardamos, etc.
@@ -32,31 +32,62 @@ public class Sistema {
             juego.iniciarJuego();
             switch (opcion.toLowerCase()) {
                 case "a":
-                    String[][] tabArch = juego.obtenerTableroDeArchivo();
-                    consola.imprimirTablero(tabArch);
+                    juego.crearTableroDeArchivo();
+                    consola.imprimirTablero(juego.obtenerTablero());
                     jugar = false;
                     break;
                 case "b":
-                    String[][] tabPre = juego.obtenerTableroPredefinido();
-                    consola.imprimirTablero(tabPre);
+                    juego.crearTableroPredefinido();
+                    consola.imprimirTablero(juego.obtenerTablero());
                     jugar = false;
                     break;
                 case "c":
                     Scanner in = new Scanner(System.in);
                     System.out.println("Ingrese nivel: ");
                     int nivel = in.nextInt();
-                    String[][] tabAle = juego.obtenerTableroAleatorio(nivel);
-                    consola.imprimirTablero(tabAle);
+                    juego.crearTableroAleatorio(nivel);
+                    consola.imprimirTablero(juego.obtenerTablero());
                     jugar = false;
-                    break;
-                case "x":
-                    jugar = false;
-                    System.out.println("¡Gracias por jugar! Hasta luego.");
                     break;
                 default:
                     System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
                     break;
             }
         }
+        
+        String [][] tablero = juego.obtenerTablero();
+        
+        while(enJuego) {
+            consola.mostrarSubMenu();
+            String opcion = scanner.nextLine();
+            switch (opcion.toLowerCase()) {
+                case "m":
+                    System.out.println("Ingrese Movimiento: fila columna");
+                    int fila = scanner.nextInt();
+                    int columna = scanner.nextInt();
+                    
+                    juego.jugar(fila, columna);
+                    enJuego = false;
+                    
+                break;
+                
+                case "x":
+                    System.out.println("...");
+                break;
+                
+               case "h":
+                    System.out.println("...");
+                break;
+                
+                case "s":
+                    System.out.println("...");
+                break;
+            }
+            
+            
+        }
+        
+        consola.imprimirTablero(juego.obtenerTablero());
+        
     }
 }
