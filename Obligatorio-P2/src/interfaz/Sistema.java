@@ -13,56 +13,59 @@ import dominio.*;
  * @author User
  */
 public class Sistema {
-    public static void main(String[] args) throws FileNotFoundException {
-        Scanner scanner = new Scanner(System.in);
-        ConsolaSoliflips consola = new ConsolaSoliflips();
-        Juego juego = new Juego();
-        
-        boolean jugar = true;
-        boolean enJuego = true; // la vamos a ir controlando a medida que el usuario hace un movimiento
+public static void main(String[] args) throws FileNotFoundException {
+    Scanner scanner = new Scanner(System.in);
+    ConsolaSoliflips consola = new ConsolaSoliflips();
+    Juego juego;
 
-        /* Faltaria logica de empezar juego, o sea, mostras el tablero, unas mini instrucciones con menu, y 
-        pedimos movimiento, lo ejecutamos, lo guardamos, etc.
-        !! Tablero aleatorio 
-        */
-        
-        while (jugar) {
-            consola.mostrarMenuPrincipal();
-            String opcion = scanner.nextLine();
-            juego.iniciarJuego();
-            switch (opcion.toLowerCase()) {
-                case "a":
-                    juego.crearTableroDeArchivo();
-                    juego.guardarTablero(juego.obtenerTableroActual());
-                    consola.imprimirTablero(juego.obtenerTableroActual());
-                    jugar = false;
-                    break;
-                case "b":
-                    juego.crearTableroPredefinido();
-                    consola.imprimirTablero(juego.obtenerTableroActual());
-                    jugar = false;
-                    break;
-                case "c":
-                    Scanner in = new Scanner(System.in);
-                    System.out.println("Ingrese nivel: ");
-                    int nivel = in.nextInt();
-                    juego.crearTableroAleatorio(nivel);
-                    consola.imprimirTablero(juego.obtenerTableroActual());
-                    jugar = false;
-                    break;
-                default:
-                    System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
-                    break;
-            }
+    while (true) {
+        // Mostrar el menú principal
+        consola.mostrarMenuPrincipal();
+        String opcion = scanner.nextLine();
+
+        switch (opcion.toLowerCase()) {
+            case "a":
+                juego = new Juego();
+                juego.crearTableroDeArchivo();
+                juego.guardarTablero(juego.obtenerTableroActual());
+                consola.imprimirTablero(juego.obtenerTableroActual());
+                jugarPartida(juego, consola, scanner);
+                break;
+            case "b":
+                juego = new Juego();
+                juego.crearTableroPredefinido();
+                juego.guardarTablero(juego.obtenerTableroActual());
+                consola.imprimirTablero(juego.obtenerTableroActual());
+                jugarPartida(juego, consola, scanner);
+                break;
+            case "c":
+                juego = new Juego();
+                Scanner in = new Scanner(System.in);
+                System.out.println("Ingrese nivel: ");
+                int nivel = in.nextInt();
+                juego.guardarTablero(juego.obtenerTableroActual());
+                consola.imprimirTablero(juego.obtenerTableroActual());
+                jugarPartida(juego, consola, scanner);
+                break;
+            case "s":
+                System.out.println("Adios. ¡Gracias por jugar!");
+                return; // Salir del programa
+            default:
+                System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
+                break;
         }
-        
-        String [][] tablero = juego.obtenerTableroActual();
-        int contador = 0;
+    }
+}
 
-        while(enJuego) {
+    public static void jugarPartida(Juego juego, ConsolaSoliflips consola, Scanner scanner) {
+        String[][] tablero;
+        int contador = 0;
+        boolean juegoTerminado = false;
+
+        while (!juegoTerminado) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
-            consola.imprimirTablero(tablero);
+
             switch (opcion.toLowerCase()) {
                 case "m":
                     System.out.println("Ingrese Movimiento: fila columna");
@@ -70,18 +73,20 @@ public class Sistema {
                     int columna = scanner.nextInt();
                     contador++;
                     scanner.nextLine();
-                    
+
                     juego.jugar(fila, columna, contador);
-                    
+
                     String[][] tablero1 = juego.obtenerTablero(contador - 1);
                     String[][] tablero2 = juego.obtenerTablero(contador);
-                    
+
                     consola.imprimirTablerosLadoALado(tablero1, tablero2);
-                    break;             
+
+                    juegoTerminado = juego.juegoTerminado();
+                    break;
                 case "x":
                     System.out.println("Adios. ¡Gracias por jugar!");
-                    enJuego = false;
-                    break;          
+                    juegoTerminado = true;
+                    break;
                 case "h":
                     consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
                     break;
@@ -93,6 +98,18 @@ public class Sistema {
                     break;
             }
         }
-        //consola.imprimirTablero(juego.obtenerTableroActual());
+
+        if (juegoTerminado) {
+            System.out.println("Tiempo de partida: " + juego.obtenerTiempoTotal());
+            System.out.println("Desea comenzar una nueva partida? S/N ");
+            String opcion = scanner.nextLine();
+
+            if (opcion.equalsIgnoreCase("N")) {
+                System.out.println("Adios. ¡Gracias por jugar!");
+                System.exit(0); // Salir del programa
+            }
+        }
     }
+
+
 }

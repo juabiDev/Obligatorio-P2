@@ -36,10 +36,6 @@ public class Juego {
         guardarHistorial(m);
     }
     
-    public boolean verificarTablero() {
-        return true;
-    }
-    
     public long obtenerTiempoTotal() {
         return tiempoFin - tiempoInicio;
     }
@@ -80,6 +76,7 @@ public class Juego {
         posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas()) {
 
             String[][] tableroPrevio = this.obtenerTablero(nroJugada - 1);
+
             String[][] tableroNuevo = new String[tableroPrevio.length][tableroPrevio[0].length];
             
              // Copiar el contenido del tablero previo al nuevo tablero
@@ -95,7 +92,20 @@ public class Juego {
             guardarMovimiento(fila, columna);
 
             this.historialTableros.agregarTablero(tableroNuevo);
+            
+            this.tablero.setTableritoActual(tableroNuevo);
+            
+            this.tiempoFin = System.currentTimeMillis();
         }
+    }
+    
+    public boolean juegoTerminado() {
+        boolean retorno = this.tablero.verificarTablero();
+        if(retorno) {
+            this.tiempoFin = System.currentTimeMillis();
+        }
+
+        return retorno;
     }
     
     public String[][] obtenerTablero(int posicion) {

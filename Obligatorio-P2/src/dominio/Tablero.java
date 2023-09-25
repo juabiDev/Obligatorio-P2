@@ -81,7 +81,7 @@ public class Tablero {
     
    public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();
@@ -125,5 +125,26 @@ public class Tablero {
             
         return t;
     }
+    
+    public boolean verificarTablero() {
+        String[][] tabla = this.tableritoActual;
+        String color = String.valueOf(tabla[0][0].charAt(1));
+        boolean retorno = true;
+        
+        for(int i = 0; i < tabla.length; i++) {
+            for(int j = 0; j < tabla[0].length; j++) {
+                String celda = tabla[i][j];
+                String colorActual = String.valueOf(celda.charAt(1));
+             
+                if(!colorActual.equals(color)) {
+                    retorno = false;
+                }
+            }
+        }
+        
+        return retorno;
+    }
+    
+    
  
 }
