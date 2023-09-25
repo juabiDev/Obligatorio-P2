@@ -57,15 +57,13 @@ public class Sistema {
         }
         
         String [][] tablero = juego.obtenerTableroActual();
-                    int contador = 0;
+        int contador = 0;
 
         while(enJuego) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
             consola.imprimirTablero(tablero);
-
             switch (opcion.toLowerCase()) {
-
                 case "m":
                     System.out.println("Ingrese Movimiento: fila columna");
                     int fila = scanner.nextInt();

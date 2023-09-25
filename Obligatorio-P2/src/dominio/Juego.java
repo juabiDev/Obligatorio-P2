@@ -49,7 +49,7 @@ public class Juego {
     }
     
     public void guardarTablero(String[][] unTablero) {
-        historialTableros.agregarTablero(unTablero);
+        this.historialTableros.agregarTablero(unTablero);
     }
     
     public ArrayList obtenerHistorialMovimientos() {
@@ -79,23 +79,22 @@ public class Juego {
         if (posicionFila >= 0 && posicionFila < this.tablero.getFilas() && 
         posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas()) {
 
+            String[][] tableroPrevio = this.obtenerTablero(nroJugada - 1);
+            String[][] tableroNuevo = new String[tableroPrevio.length][tableroPrevio[0].length];
             
-            String [][] tableroNuevo = this.obtenerTablero(nroJugada - 1);
-
-            //System.out.println("Tablero:"+tableroNuevo[0][0]);
-
-                        
+             // Copiar el contenido del tablero previo al nuevo tablero
+            for (int i = 0; i < tableroPrevio.length; i++) {
+                for (int j = 0; j < tableroPrevio[0].length; j++) {
+                    tableroNuevo[i][j] = tableroPrevio[i][j];
+                }
+            }
+            
             String celda = tableroNuevo[posicionFila][posicionColumna];
 
             aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
             guardarMovimiento(fila, columna);
-            
-            //System.out.println("Tablero:"+tableroNuevo[0][0]);
-            
+
             this.historialTableros.agregarTablero(tableroNuevo);
-            
-            this.historialTableros.imprimirLista();
-            
         }
     }
     

@@ -19,17 +19,20 @@ public class HistorialTableros {
     }
     
     public void agregarTablero(String[][] unTablero) {
-        tableros.add(unTablero);
+        // Copiar el tablero y agregar la copia al historial
+        String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];
+        for (int i = 0; i < unTablero.length; i++) {
+            copiaTablero[i] = Arrays.copyOf(unTablero[i], unTablero[i].length);
+        }
+        tableros.add(copiaTablero);
     }
     
     public String[][] obtenerTablero(int posicion) {
-        String[][] retorno = null;
-        
-        for(String[][] unTablero : tableros) {
-            retorno = tableros.get(posicion);
+        if (posicion >= 0 && posicion < tableros.size()) {
+            return tableros.get(posicion);
+        } else {
+            return null; // O puedes lanzar una excepción si lo prefieres
         }
-        
-        return retorno;
     }
     
     public ArrayList obtenerHistorialCompleto() {
@@ -37,8 +40,8 @@ public class HistorialTableros {
     }
     
     public void imprimirLista() {
-        for(String[][] unTablero : tableros) {
-            System.out.println(Arrays.toString(unTablero[0]));
+        for (String[][] unTablero : tableros) {
+            System.out.println(unTablero[0]);
         }
     }
 }
