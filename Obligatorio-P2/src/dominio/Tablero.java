@@ -16,14 +16,12 @@ public class Tablero {
     private int filas;
     private int columnas;
     private int nivel;
-    private String [][] tableritoPrevio;
     private String [][] tableritoActual;
     
     public Tablero() { // el tablero tiene como minimo 3 filas y 3 columnas
         this.filas = 3;
         this.columnas = 3;
         this.nivel = 1;
-        this.tableritoPrevio = new String[this.filas][this.columnas];
         this.tableritoActual = new String[this.filas][this.columnas];
     }
     
@@ -32,7 +30,6 @@ public class Tablero {
         if(valido) {
             this.filas = filas;
             this.columnas = columnas;
-            this.tableritoPrevio = new String[this.filas][this.columnas];
             this.tableritoActual = new String[this.filas][this.columnas];
         }
     }
@@ -51,16 +48,8 @@ public class Tablero {
         
     }
     
-    public void setTableritoPrevio(String[][] untablero) {
-        this.tableritoPrevio = untablero;
-    }
-    
-    public String[][] getTableritoPrevio() {
-        return this.tableritoPrevio;
-    }
-    
     public void setTableritoActual(String[][] untablero) {
-        this.tableritoActual = untablero;
+       this.tableritoActual = untablero;
     }
     
     public int getFilas() {
@@ -92,7 +81,7 @@ public class Tablero {
     
    public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();

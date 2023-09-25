@@ -33,6 +33,7 @@ public class Sistema {
             switch (opcion.toLowerCase()) {
                 case "a":
                     juego.crearTableroDeArchivo();
+                    juego.guardarTablero(juego.obtenerTableroActual());
                     consola.imprimirTablero(juego.obtenerTableroActual());
                     jugar = false;
                     break;
@@ -56,22 +57,28 @@ public class Sistema {
         }
         
         String [][] tablero = juego.obtenerTableroActual();
-        
+                    int contador = 0;
+
         while(enJuego) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
             consola.imprimirTablero(tablero);
-            
+
             switch (opcion.toLowerCase()) {
+
                 case "m":
                     System.out.println("Ingrese Movimiento: fila columna");
                     int fila = scanner.nextInt();
                     int columna = scanner.nextInt();
+                    contador++;
                     scanner.nextLine();
                     
-                    juego.jugar(fila, columna);
-
-                    consola.imprimirTablerosLadoALado(juego.obtenerTableroPrevio(), juego.obtenerTableroActual());
+                    juego.jugar(fila, columna, contador);
+                    
+                    String[][] tablero1 = juego.obtenerTablero(contador - 1);
+                    String[][] tablero2 = juego.obtenerTablero(contador);
+                    
+                    consola.imprimirTablerosLadoALado(tablero1, tablero2);
                     break;             
                 case "x":
                     System.out.println("Adios. ¡Gracias por jugar!");

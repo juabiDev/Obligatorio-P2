@@ -94,6 +94,11 @@ public class ConsolaSoliflips {
 public void imprimirTablerosLadoALado(String[][] tableroPrevio, String[][] tableroActual) {
     int filas = tableroActual.length;
     int columnas = tableroActual[0].length;
+    
+    // Definir los códigos ANSI para los colores
+    String colorRojo = "\033[31m";
+    String colorAzul = "\033[34m";
+    String colorReset = "\033[0m"; // Restablecer el color al predeterminado
 
     // Encontrar la longitud del número de columna más largo
     int longitudNumero = String.valueOf(columnas).length();
@@ -134,16 +139,30 @@ public void imprimirTablerosLadoALado(String[][] tableroPrevio, String[][] table
         String filaFormateada = String.format("%-" + longitudNumero + "s", fila + 1);
         System.out.print(filaFormateada + " ");
         for (int columna = 0; columna < columnas; columna++) {
-            String simboloFormateado = String.format("%-3s", tableroPrevio[fila][columna]);
-            System.out.print("|" + simboloFormateado);
+                String celda = tableroPrevio[fila][columna];
+                char simbolo = celda.charAt(0);
+                char color = celda.charAt(1);
+                
+                // Determinar el color a aplicar
+                String colorCelda = (color == 'R') ? colorRojo : colorAzul;
+            
+            String simboloFormateado = String.format("%-3s", colorCelda + simbolo + colorReset);
+            System.out.print("| " + simboloFormateado + " ");
         }
         System.out.print("|  ==>  "); // Flecha que separa los tableros
 
         // Imprime números de fila para el tablero actual
         System.out.print(filaFormateada + " ");
         for (int columna = 0; columna < columnas; columna++) {
-            String simboloFormateado = String.format("%-3s", tableroActual[fila][columna]);
-            System.out.print("|" + simboloFormateado);
+                String celda = tableroActual[fila][columna];
+                char simbolo = celda.charAt(0);
+                char color = celda.charAt(1);
+                
+                // Determinar el color a aplicar
+                String colorCelda = (color == 'R') ? colorRojo : colorAzul;
+            
+            String simboloFormateado = String.format("%-3s", colorCelda + simbolo + colorReset);
+            System.out.print("| " + simboloFormateado + " ");
         }
         System.out.println("|"); // Cambiar de línea después de cada fila de celdas
     }
