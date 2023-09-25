@@ -75,32 +75,24 @@ public class Tablero {
         return this.tableritoActual;
     }
     
-    public static String[][] tableroAleatorio(int dificultad) {
-        String pipeAzul = "\033[34m" + "| " + "\033[0m";
-        String pipeRojo = "\033[31m" + "| " + "\033[0m";
-        
-        String guionAzul = "\033[34m" + "- " + "\033[0m";
-        String guionRojo = "\033[31m" + "- " + "\033[0m";
-        
-        String diagonalDerechaAzul = "\033[34m" + "/ " + "\033[0m";
-        String diagonalDerechaRojo = "\033[31m" + "/ " + "\033[0m";
-        
-        String diagonalIzquierdaAzul = "\033[34m" + "\\ " + "\033[0m";
-        String diagonalIzquierdaRojo = "\033[31m" + "\\ " + "\033[0m";
-        
-         String[][] tablero = {
-            {pipeAzul, pipeAzul, guionRojo, diagonalDerechaAzul, pipeRojo, guionRojo},
-            {guionRojo , diagonalDerechaAzul, diagonalDerechaAzul, pipeAzul, guionRojo, guionRojo},
-            {guionRojo, guionRojo, pipeAzul, guionRojo, diagonalDerechaRojo, guionRojo},
-            {diagonalIzquierdaRojo, guionRojo, pipeRojo, diagonalIzquierdaRojo, pipeAzul, pipeRojo},
-            {diagonalIzquierdaRojo, diagonalDerechaRojo, diagonalDerechaRojo, pipeAzul, diagonalDerechaAzul, diagonalIzquierdaAzul},
+    public static Tablero tableroAleatorio(int dificultad) {
+        String[][] tablero = {
+            {"|A", "|A", "-R", "/A", "|R", "-R"},
+            {"-R", "/A", "/A", "|A", "-R", "-R"},
+            {"-R", "-R", "|A", "-R", "/R", "-R"},
+            {"\\R", "-R", "|R", "\\R", "|A", "|R"},
+            {"\\R", "/R", "/R", "|A", "/A", "\\A"}
         };
-        return tablero;
+        
+        Tablero t = new Tablero(5, 6, 3);
+        t.setTableritoActual(tablero);
+            
+        return t;
     }
     
    public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();
@@ -116,8 +108,6 @@ public class Tablero {
                 
                 for (int columna = 0; columna < n; columna++) {
                     String simbolo = simbolos[columna]; 
-                    
-                    
                     // Agregar el símbolo al tablero con el color correspondiente
                     tablero[fila][columna] = simbolo; // Resetear color
                 }
@@ -132,27 +122,19 @@ public class Tablero {
             return t;
     }
     
-    public static String[][] tableroPredefinido() {        
-        String pipeAzul = "\033[34m" + "| " + "\033[0m";
-        String pipeRojo = "\033[31m" + "| " + "\033[0m";
-        
-        String guionAzul = "\033[34m" + "- " + "\033[0m";
-        String guionRojo = "\033[31m" + "- " + "\033[0m";
-        
-        String diagonalDerechaAzul = "\033[34m" + "/ " + "\033[0m";
-        String diagonalDerechaRojo = "\033[31m" + "/ " + "\033[0m";
-        
-        String diagonalIzquierdaAzul = "\033[34m" + "\\ " + "\033[0m";
-        String diagonalIzquierdaRojo = "\033[31m" + "\\ " + "\033[0m";
-        
+    public static Tablero tableroPredefinido() {                
         String[][] tablero = {
-            {pipeAzul, pipeAzul, guionRojo, diagonalDerechaAzul, pipeRojo, guionRojo},
-            {guionRojo , diagonalDerechaAzul, diagonalDerechaAzul, pipeAzul, guionRojo, guionRojo},
-            {guionRojo, guionRojo, pipeAzul, guionRojo, diagonalDerechaRojo, guionRojo},
-            {diagonalIzquierdaRojo, guionRojo, pipeRojo, diagonalIzquierdaRojo, pipeAzul, pipeRojo},
-            {diagonalIzquierdaRojo, diagonalDerechaRojo, diagonalDerechaRojo, pipeAzul, diagonalDerechaAzul, diagonalIzquierdaAzul},
+            {"|A", "|A", "-R", "/A", "|R", "-R"},
+            {"-R", "/A", "/A", "|A", "-R", "-R"},
+            {"-R", "-R", "|A", "-R", "/R", "-R"},
+            {"\\R", "-R", "|R", "\\R", "|A", "|R"},
+            {"\\R", "/R", "/R", "|A", "/A", "\\A"}
         };
-        return tablero;
+        
+        Tablero t = new Tablero(5, 6, 3);
+        t.setTableritoActual(tablero);
+            
+        return t;
     }
  
 }

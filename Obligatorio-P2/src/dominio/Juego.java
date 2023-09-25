@@ -28,7 +28,7 @@ public class Juego {
         tiempoInicio = System.currentTimeMillis();
     }
     
-    public void realizarMovimiento(int fila, int columna) {
+    public void guardarMovimiento(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorial(m);
     }
@@ -54,11 +54,11 @@ public class Juego {
     }
     
     public void crearTableroAleatorio(int unaDificultad) {
-        tablero.tableroAleatorio(unaDificultad);
+        tablero = tablero.tableroAleatorio(unaDificultad);
     }
     
     public void crearTableroPredefinido() {
-        tablero.tableroPredefinido();
+        tablero = tablero.tableroPredefinido();
     }
     
     public String[][] obtenerTableroActual() {
@@ -73,12 +73,15 @@ public class Juego {
         int posicionFila = fila - 1;
         int posicionColumna = columna - 1;
         
-        if((posicionFila >= 3 && posicionFila <= this.tablero.getFilas()) && (posicionColumna >= 3 && posicionColumna <= this.tablero.getColumnas())) {
+        if (posicionFila >= 0 && posicionFila < this.tablero.getFilas() && 
+        posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas()) {
             String [][] tablero = this.tablero.getTableritoActual();
+            this.tablero.setTableritoPrevio(tablero);
+            
             String celda = tablero[posicionFila][posicionColumna];
 
-            recorrida(celda, posicionFila, posicionColumna);
-            realizarMovimiento(fila, columna);
+            aplicarMovimiento(celda, posicionFila, posicionColumna);
+            guardarMovimiento(fila, columna);
         }
     }
     
@@ -90,111 +93,61 @@ public class Juego {
     
     */
     
-    public void recorrida(String celda, int fila, int columna) {
-        String[][] tablero = this.tablero.getTableritoActual();;
-        
-        // Guardamos el tablero antes de modificarlo
-        String [][] tableroPrevio = this.tablero.getTableritoActual();
-        this.tablero.setTableritoPrevio(tableroPrevio);
-        
+    public void aplicarMovimiento(String celda, int fila, int columna) {
+        String[][] tablero = this.tablero.getTableritoActual();
+
         char simbolo = celda.charAt(0);
-        char color = celda.charAt(1);
-        
-        if(String.valueOf(simbolo).equals("|")) {
-            for (int i = 0; i < tablero.length; i++) {
-                
-                String actual = tablero[i][columna];
-                String simboloActual = String.valueOf(actual.charAt(0));
-                String colorActual = String.valueOf(actual.charAt(1));
-                            
-                if(String.valueOf(colorActual).equals("R")) {
-                    colorActual = "A";
-                    tablero[i][columna] = simboloActual + colorActual;
-                            
-                } else {
-                    colorActual = "R";
-                    tablero[i][columna] = simboloActual + colorActual;
+
+        switch (simbolo) {
+            case '|':
+                for (int i = 0; i < tablero.length; i++) {
+                    String actual = tablero[i][columna];
+                    String simboloActual = String.valueOf(actual.charAt(0));
+                    String colorActual = String.valueOf(actual.charAt(1));
+                    tablero[i][columna] = simboloActual + cambiarColorOpuesto(colorActual);
                 }
-                        
-            }
-        }      
-    
-        if(String.valueOf(simbolo).equals("-")) {
-
-            for( int j = 0; j < tablero[0].length; j++) {
-                
-                String actual = tablero[fila][j];
-                String simboloActual = String.valueOf(actual.charAt(0));
-                String colorActual = String.valueOf(actual.charAt(1));
-                            
-                if(String.valueOf(colorActual).equals("R")) {
-                    colorActual = "A";
-                    tablero[fila][j] = simboloActual + colorActual;
-                            
-                } else {
-                    colorActual = "R";
-                    tablero[fila][j] = simboloActual + colorActual;
+                break;
+            case '-':
+                for (int j = 0; j < tablero[0].length; j++) {
+                    String actual = tablero[fila][j];
+                    String simboloActual = String.valueOf(actual.charAt(0));
+                    String colorActual = String.valueOf(actual.charAt(1));
+                    tablero[fila][j] = simboloActual + cambiarColorOpuesto(colorActual);
                 }
-            
-            }
-
-        }
-        
-        if(String.valueOf(simbolo).equals("\\")) {
-            int diferencia = fila - columna;
-            
-            for(int i = 0; i < tablero.length; i++) {
-                for(int j = 0; j < tablero[0].length; j++) {
-                    int diferencia2 = i - j;
-                    if(diferencia2 == diferencia) {
-                        
-                        String actual = tablero[i][j];
-                        String simboloActual = String.valueOf(actual.charAt(0));
-                        String colorActual = String.valueOf(actual.charAt(1));
-                
-                        if(String.valueOf(colorActual).equals("R")) {
-                            colorActual = "A";
-                            tablero[i][j] = simboloActual + colorActual;
-
-                        } else {
-                            colorActual = "R";
-                            tablero[i][j] = simboloActual + colorActual;
+                break;
+            case '\\':
+                int diferencia = fila - columna;
+                for (int i = 0; i < tablero.length; i++) {
+                    for (int j = 0; j < tablero[0].length; j++) {
+                        int diferencia2 = i - j;
+                        if (diferencia2 == diferencia) {
+                            String actual = tablero[i][j];
+                            String simboloActual = String.valueOf(actual.charAt(0));
+                            String colorActual = String.valueOf(actual.charAt(1));
+                            tablero[i][j] = simboloActual + cambiarColorOpuesto(colorActual);
                         }
                     }
-                    
                 }
-            }
-        }
-        
-        if(String.valueOf(simbolo).equals("/")) {
-            int diferencia = fila + columna;
-            
-            for(int i = 0; i < tablero.length; i++) {
-                for(int j = 0; j < tablero[0].length; j++) {
-                    int diferencia2 = i + j;
-                    if(diferencia2 == diferencia) {
-                        
-                        System.out.println(tablero[i][j]);
-                        
-                        String actual = tablero[i][j];
-                        String simboloActual = String.valueOf(actual.charAt(0));
-                        String colorActual = String.valueOf(actual.charAt(1));
-                
-                        if(String.valueOf(colorActual).equals("R")) {
-                            colorActual = "A";
-                            tablero[i][j] = simboloActual + colorActual;
-
-                        } else {
-                            colorActual = "R";
-                            tablero[i][j] = simboloActual + colorActual;
+                break;
+            case '/':
+                int suma = fila + columna;
+                for (int i = 0; i < tablero.length; i++) {
+                    for (int j = 0; j < tablero[0].length; j++) {
+                        int suma2 = i + j;
+                        if (suma2 == suma) {
+                            String actual = tablero[i][j];
+                            String simboloActual = String.valueOf(actual.charAt(0));
+                            String colorActual = String.valueOf(actual.charAt(1));
+                            tablero[i][j] = simboloActual + cambiarColorOpuesto(colorActual);
                         }
                     }
-                    
                 }
-            }
+                break;
+            //Default ???
         }
-        
-     
     }
-  
+
+    private String cambiarColorOpuesto(String colorActual) {
+        return colorActual.equals("R") ? "A" : "R";
+    }
 }

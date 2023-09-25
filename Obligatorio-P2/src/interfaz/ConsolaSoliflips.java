@@ -5,7 +5,6 @@
 package interfaz;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 /**
  *
@@ -21,12 +20,17 @@ public class ConsolaSoliflips {
         System.out.print("Opción: ");
     }
     
-    public static void imprimirTablero(String[][] tablero) {
+    public void imprimirTablero(String[][] tablero) {
         int filas = tablero.length;
         int columnas = tablero[0].length;
 
         // Encontrar la longitud del número de columna más largo
         int longitudNumero = String.valueOf(columnas).length();
+
+        // Definir los códigos ANSI para los colores
+        String colorRojo = "\033[31m";
+        String colorAzul = "\033[34m";
+        String colorReset = "\033[0m"; // Restablecer el color al predeterminado
 
         // Imprimir números de columna
         System.out.print(" ");
@@ -43,14 +47,22 @@ public class ConsolaSoliflips {
                 System.out.print("---+");
             }
             System.out.println(); // Final de la línea superior de la celda
-            
+
             // Imprimir contenido de la celda
             String numeroFila = String.valueOf(fila + 1);
             String filaFormateada = String.format("%-" + longitudNumero + "s", numeroFila);
             System.out.print(filaFormateada + " ");
             for (int columna = 0; columna < columnas; columna++) {
-                String simboloFormateado = String.format("%-2s", tablero[fila][columna]);
-                System.out.print("| " + simboloFormateado);
+                String celda = tablero[fila][columna];
+                char simbolo = celda.charAt(0);
+                char color = celda.charAt(1);
+
+                // Determinar el color a aplicar
+                String colorCelda = (color == 'R') ? colorRojo : colorAzul;
+
+                // Formatear y mostrar el símbolo con el color apropiado
+                String simboloFormateado = String.format("%-3s", colorCelda + simbolo + colorReset);
+                System.out.print("| " + simboloFormateado + " ");
             }
             System.out.println("|"); // Final de la línea de contenido de la celda
         }
@@ -70,13 +82,85 @@ public class ConsolaSoliflips {
         System.out.println("H) Mostrar historial de movimientos (fila, columna)");
         System.out.println("S) Mostrar solución");
         System.out.print("Opción: ");
+        System.out.println(); 
     }
 
     public void imprimirHistorial(ArrayList movimientos) {
         System.out.println("Historial de Movimientos:");
         for(int i = 0; i < movimientos.size(); i++) {
             System.out.println(movimientos.get(i));
-        }
-        
+        } 
     }
+public void imprimirTablerosLadoALado(String[][] tableroPrevio, String[][] tableroActual) {
+    int filas = tableroActual.length;
+    int columnas = tableroActual[0].length;
+
+    // Encontrar la longitud del número de columna más largo
+    int longitudNumero = String.valueOf(columnas).length();
+
+    // Imprimir números de columna para el tablero previo
+    System.out.print(" ");
+    for (int i = 1; i <= columnas; i++) {
+        String columnaFormateada = String.format("%-" + longitudNumero + "s", i);
+        System.out.print("   " + columnaFormateada);
+    }
+
+    // Espacio que separa los tableros
+    System.out.print("          ");
+
+    // Imprimir números de columna para el tablero actual
+    for (int i = 1; i <= columnas; i++) {
+        String columnaFormateada = String.format("%-" + longitudNumero + "s", i);
+        System.out.print("   " + columnaFormateada);
+    }
+    System.out.println(); // Cambiar de línea después de los números de columna
+
+    for (int fila = 0; fila < filas; fila++) {
+        // Línea superior de las celdas para el tablero previo
+        System.out.print("  +");
+        for (int columna = 0; columna < columnas; columna++) {
+            System.out.print("---+");
+        }
+        System.out.print("  ==>  "); // Flecha que separa los tableros
+
+        // Línea superior de las celdas para el tablero actual
+        System.out.print("  +");
+        for (int columna = 0; columna < columnas; columna++) {
+            System.out.print("---+");
+        }
+        System.out.println(); // Cambiar de línea después de la línea superior de celdas
+
+        // Imprime números de fila para el tablero previo
+        String filaFormateada = String.format("%-" + longitudNumero + "s", fila + 1);
+        System.out.print(filaFormateada + " ");
+        for (int columna = 0; columna < columnas; columna++) {
+            String simboloFormateado = String.format("%-3s", tableroPrevio[fila][columna]);
+            System.out.print("|" + simboloFormateado);
+        }
+        System.out.print("|  ==>  "); // Flecha que separa los tableros
+
+        // Imprime números de fila para el tablero actual
+        System.out.print(filaFormateada + " ");
+        for (int columna = 0; columna < columnas; columna++) {
+            String simboloFormateado = String.format("%-3s", tableroActual[fila][columna]);
+            System.out.print("|" + simboloFormateado);
+        }
+        System.out.println("|"); // Cambiar de línea después de cada fila de celdas
+    }
+
+    // Línea inferior de las matrices para el tablero previo
+    System.out.print("  +");
+    for (int columna = 0; columna < columnas; columna++) {
+        System.out.print("---+");
+    }
+    System.out.print("  ==>  "); // Flecha que separa los tableros
+
+    // Línea inferior de las matrices para el tablero actual
+    System.out.print("  +");
+    for (int columna = 0; columna < columnas; columna++) {
+        System.out.print("---+");
+    }
+    System.out.println(); // Cambiar de línea después de la línea inferior de las matrices
+}
+
 }

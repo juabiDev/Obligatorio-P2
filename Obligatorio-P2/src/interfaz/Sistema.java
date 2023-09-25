@@ -67,29 +67,27 @@ public class Sistema {
                     System.out.println("Ingrese Movimiento: fila columna");
                     int fila = scanner.nextInt();
                     int columna = scanner.nextInt();
+                    scanner.nextLine();
                     
                     juego.jugar(fila, columna);
-                    
-                break;
-                
+
+                    consola.imprimirTablerosLadoALado(juego.obtenerTableroPrevio(), juego.obtenerTableroActual());
+                    break;             
                 case "x":
-                    System.out.println("Adios");
+                    System.out.println("Adios. ¡Gracias por jugar!");
                     enJuego = false;
-                break;
-                
-               case "h":
+                    break;          
+                case "h":
                     consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
-                break;
-                
+                    break;
                 case "s":
                     System.out.println("...");
-                break;
+                    break;
+                default:
+                    System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
+                    break;
             }
-            
-            
         }
-        
-        consola.imprimirTablero(juego.obtenerTableroActual());
-        
+        //consola.imprimirTablero(juego.obtenerTableroActual());
     }
 }
