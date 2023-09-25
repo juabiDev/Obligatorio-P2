@@ -16,13 +16,15 @@ public class Tablero {
     private int filas;
     private int columnas;
     private int nivel;
-    private String [][] tablerito;
+    private String [][] tableritoPrevio;
+    private String [][] tableritoActual;
     
     public Tablero() { // el tablero tiene como minimo 3 filas y 3 columnas
         this.filas = 3;
         this.columnas = 3;
         this.nivel = 1;
-        this.tablerito = new String[this.filas][this.columnas];
+        this.tableritoPrevio = new String[this.filas][this.columnas];
+        this.tableritoActual = new String[this.filas][this.columnas];
     }
     
     public Tablero(int filas, int columnas, int nivel) {
@@ -30,7 +32,8 @@ public class Tablero {
         if(valido) {
             this.filas = filas;
             this.columnas = columnas;
-            this.tablerito = new String[this.filas][this.columnas];
+            this.tableritoPrevio = new String[this.filas][this.columnas];
+            this.tableritoActual = new String[this.filas][this.columnas];
         }
     }
     
@@ -48,12 +51,28 @@ public class Tablero {
         
     }
     
-    public void setTablerito(String[][] untablero) {
-        this.tablerito = untablero;
+    public void setTableritoPrevio(String[][] untablero) {
+        this.tableritoPrevio = untablero;
     }
     
-    public String[][] getTablerito() {
-        return this.tablerito;
+    public String[][] getTableritoPrevio() {
+        return this.tableritoPrevio;
+    }
+    
+    public void setTableritoActual(String[][] untablero) {
+        this.tableritoActual = untablero;
+    }
+    
+    public int getFilas() {
+        return this.filas;
+    }
+    
+    public int getColumnas() {
+        return this.columnas;
+    }
+    
+    public String[][] getTableritoActual() {
+        return this.tableritoActual;
     }
     
     public static String[][] tableroAleatorio(int dificultad) {
@@ -108,7 +127,7 @@ public class Tablero {
             input.close();
             
             Tablero t = new Tablero(m, n, nivel);
-            t.setTablerito(tablero);
+            t.setTableritoActual(tablero);
             
             return t;
     }

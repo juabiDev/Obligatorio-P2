@@ -33,12 +33,12 @@ public class Sistema {
             switch (opcion.toLowerCase()) {
                 case "a":
                     juego.crearTableroDeArchivo();
-                    consola.imprimirTablero(juego.obtenerTablero());
+                    consola.imprimirTablero(juego.obtenerTableroActual());
                     jugar = false;
                     break;
                 case "b":
                     juego.crearTableroPredefinido();
-                    consola.imprimirTablero(juego.obtenerTablero());
+                    consola.imprimirTablero(juego.obtenerTableroActual());
                     jugar = false;
                     break;
                 case "c":
@@ -46,7 +46,7 @@ public class Sistema {
                     System.out.println("Ingrese nivel: ");
                     int nivel = in.nextInt();
                     juego.crearTableroAleatorio(nivel);
-                    consola.imprimirTablero(juego.obtenerTablero());
+                    consola.imprimirTablero(juego.obtenerTableroActual());
                     jugar = false;
                     break;
                 default:
@@ -55,11 +55,13 @@ public class Sistema {
             }
         }
         
-        String [][] tablero = juego.obtenerTablero();
+        String [][] tablero = juego.obtenerTableroActual();
         
         while(enJuego) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
+            consola.imprimirTablero(tablero);
+            
             switch (opcion.toLowerCase()) {
                 case "m":
                     System.out.println("Ingrese Movimiento: fila columna");
@@ -67,16 +69,16 @@ public class Sistema {
                     int columna = scanner.nextInt();
                     
                     juego.jugar(fila, columna);
-                    enJuego = false;
                     
                 break;
                 
                 case "x":
-                    System.out.println("...");
+                    System.out.println("Adios");
+                    enJuego = false;
                 break;
                 
                case "h":
-                    System.out.println("...");
+                    consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
                 break;
                 
                 case "s":
@@ -87,7 +89,7 @@ public class Sistema {
             
         }
         
-        consola.imprimirTablero(juego.obtenerTablero());
+        consola.imprimirTablero(juego.obtenerTableroActual());
         
     }
 }

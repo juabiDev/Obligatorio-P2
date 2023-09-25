@@ -4,6 +4,9 @@
  */
 package interfaz;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 /**
  *
  * @author Dell_
@@ -60,12 +63,20 @@ public class ConsolaSoliflips {
         System.out.println(); // Final de la línea inferior de la matriz
     }
     
-     public void mostrarSubMenu() {
+    public void mostrarSubMenu() {
         System.out.println("Seleccione una opción:");
         System.out.println("M) Realizar movimiento fila columna");
         System.out.println("X) Terminar este juego");
         System.out.println("H) Mostrar historial de movimientos (fila, columna)");
         System.out.println("S) Mostrar solución");
         System.out.print("Opción: ");
+    }
+
+    public void imprimirHistorial(ArrayList movimientos) {
+        System.out.println("Historial de Movimientos:");
+        for(int i = 0; i < movimientos.size(); i++) {
+            System.out.println(movimientos.get(i));
+        }
+        
     }
 }

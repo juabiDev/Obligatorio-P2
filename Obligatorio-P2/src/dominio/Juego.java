@@ -5,6 +5,7 @@
 package dominio;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,8 +28,9 @@ public class Juego {
         tiempoInicio = System.currentTimeMillis();
     }
     
-    public void realizarMovimiento(Movimiento m) {
-        
+    public void realizarMovimiento(int fila, int columna) {
+        Movimiento m = new Movimiento(fila,columna);
+        guardarHistorial(m);
     }
     
     public boolean verificarTablero() {
@@ -40,7 +42,11 @@ public class Juego {
     }
 
     public void guardarHistorial(Movimiento m) {
-        
+        historialMovimientos.agregarMovimiento(m);
+    }
+    
+    public ArrayList obtenerHistorialMovimientos() {
+        return historialMovimientos.obtenerHistorialCompleto();
     }
     
     public void crearTableroDeArchivo() throws FileNotFoundException {
@@ -55,16 +61,25 @@ public class Juego {
         tablero.tableroPredefinido();
     }
     
-    public String[][] obtenerTablero() {
-        return tablero.getTablerito();
+    public String[][] obtenerTableroActual() {
+        return tablero.getTableritoActual();
+    }
+    
+    public String[][] obtenerTableroPrevio() {
+        return tablero.getTableritoPrevio();
     }
     
     public void jugar(int fila, int columna) {
-        String [][] tablero = this.tablero.getTablerito();
-        String celda = tablero[fila - 1][columna - 1];
+        int posicionFila = fila - 1;
+        int posicionColumna = columna - 1;
         
-        recorrida(celda, fila - 1, columna - 1);
+        if((posicionFila >= 3 && posicionFila <= this.tablero.getFilas()) && (posicionColumna >= 3 && posicionColumna <= this.tablero.getColumnas())) {
+            String [][] tablero = this.tablero.getTableritoActual();
+            String celda = tablero[posicionFila][posicionColumna];
 
+            recorrida(celda, posicionFila, posicionColumna);
+            realizarMovimiento(fila, columna);
+        }
     }
     
     /*
@@ -76,12 +91,14 @@ public class Juego {
     */
     
     public void recorrida(String celda, int fila, int columna) {
-        String[][] tablero = this.tablero.getTablerito();
+        String[][] tablero = this.tablero.getTableritoActual();;
+        
+        // Guardamos el tablero antes de modificarlo
+        String [][] tableroPrevio = this.tablero.getTableritoActual();
+        this.tablero.setTableritoPrevio(tableroPrevio);
         
         char simbolo = celda.charAt(0);
         char color = celda.charAt(1);
-        
-
         
         if(String.valueOf(simbolo).equals("|")) {
             for (int i = 0; i < tablero.length; i++) {

@@ -22,4 +22,9 @@ public class Movimiento {
         this.columna = columna;
     }
     
+    @Override
+    public String toString() {
+        return "("+fila+","+columna+")";
+    }
+    
 }
