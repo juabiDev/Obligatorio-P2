@@ -27,21 +27,49 @@ public class HistorialTableros {
         tableros.add(copiaTablero);
     }
     
-    public String[][] obtenerTablero(int posicion) {
-        if (posicion >= 0 && posicion < tableros.size()) {
-            return tableros.get(posicion);
-        } else {
-            return null; // O puedes lanzar una excepción si lo prefieres
+    public String[][] obtenerUltimoTablero() {
+        String[][] ultimo = null;
+        
+        for(int i = 0; i < tableros.size(); i++) {
+            if(i == tableros.size() - 1) {
+                ultimo = tableros.get(i);
+            }
         }
+
+        return ultimo;
+    }
+    
+    public String[][][] obtenerUltimosDosTableros() {
+        String[][][] ultimas = new String[2][][];
+        
+        for(int i = 0; i < tableros.size(); i++) {
+            if(i == tableros.size() - 2) {
+                ultimas[0] = tableros.get(i);
+            }
+                        
+            if(i == tableros.size() - 1) {
+                ultimas[1] = tableros.get(i);
+            }
+        }
+                
+        return ultimas;
     }
     
     public ArrayList obtenerHistorialCompleto() {
         return tableros;
     }
     
+    public void borrarUltimoTablero() {
+        if(tableros.size() > 1) {
+            tableros.remove(tableros.size() - 1);
+        } else {
+            System.out.println("No hay tablero anterior");
+        }
+    }
+    
     public void imprimirLista() {
         for (String[][] unTablero : tableros) {
-            System.out.println(unTablero[0]);
+            System.out.println(Arrays.toString(unTablero[0]));
         }
     }
 }

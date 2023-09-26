@@ -68,35 +68,53 @@ public class Juego {
         return this.tablero.getTableritoActual();
     }
     
-    public void jugar(int fila, int columna, int nroJugada) {
+    public void jugar(int fila, int columna) {
         int posicionFila = fila - 1;
         int posicionColumna = columna - 1;
+        boolean condicion1 = posicionFila >= 0 && posicionFila < this.tablero.getFilas();
+        boolean condicion2 = posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas();
+        boolean condicion3 = fila == -1 && columna == -1;
         
-        if (posicionFila >= 0 && posicionFila < this.tablero.getFilas() && 
-        posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas()) {
+        if ((condicion1 && condicion2) || condicion3) {
 
-            String[][] tableroPrevio = this.obtenerTablero(nroJugada - 1);
-
-            String[][] tableroNuevo = new String[tableroPrevio.length][tableroPrevio[0].length];
             
-             // Copiar el contenido del tablero previo al nuevo tablero
-            for (int i = 0; i < tableroPrevio.length; i++) {
-                for (int j = 0; j < tableroPrevio[0].length; j++) {
-                    tableroNuevo[i][j] = tableroPrevio[i][j];
-                }
+            if(!(fila == -1 && columna == -1)) {
+                String[][] tableroPrevio = this.obtenerUltimoTablero();
+                String[][] tableroNuevo = copiarTablero(tableroPrevio);
+
+                String celda = tableroNuevo[posicionFila][posicionColumna];
+
+                aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
+                
+                this.historialTableros.agregarTablero(tableroNuevo);
+            
+                this.tablero.setTableritoActual(tableroNuevo);
+                
+            } else {          
+                this.borrarUltimoTablero();
+                
+                String[][] tableroPrevio = this.obtenerUltimoTablero();
+                String[][] tableroNuevo = copiarTablero(tableroPrevio);
+                
+                this.tablero.setTableritoActual(tableroNuevo);
             }
             
-            String celda = tableroNuevo[posicionFila][posicionColumna];
-
-            aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
             guardarMovimiento(fila, columna);
-
-            this.historialTableros.agregarTablero(tableroNuevo);
-            
-            this.tablero.setTableritoActual(tableroNuevo);
             
             this.tiempoFin = System.currentTimeMillis();
         }
+    }
+    
+    private String[][] copiarTablero(String[][] unTablero) {
+        String[][] retorno = new String[unTablero.length][unTablero[0].length];
+        
+        for (int i = 0; i < unTablero.length; i++) {
+            for (int j = 0; j < unTablero[0].length; j++) {
+                retorno[i][j] = unTablero[i][j];
+            }
+        }
+        
+        return retorno;
     }
     
     public boolean juegoTerminado() {
@@ -108,8 +126,16 @@ public class Juego {
         return retorno;
     }
     
-    public String[][] obtenerTablero(int posicion) {
-        return historialTableros.obtenerTablero(posicion);
+    public String[][] obtenerUltimoTablero() {
+        return historialTableros.obtenerUltimoTablero();
+    }
+    
+    public String[][][] obtenerUltimosDosTableros() {
+        return historialTableros.obtenerUltimosDosTableros();
+    }
+    
+    public void borrarUltimoTablero() {
+        this.historialTableros.borrarUltimoTablero();
     }
     
     /*

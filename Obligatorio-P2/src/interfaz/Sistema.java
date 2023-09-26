@@ -58,7 +58,6 @@ public static void main(String[] args) throws FileNotFoundException {
 }
 
     public static void jugarPartida(Juego juego, ConsolaSoliflips consola, Scanner scanner) {
-        String[][] tablero;
         int contador = 0;
         boolean juegoTerminado = false;
 
@@ -73,15 +72,21 @@ public static void main(String[] args) throws FileNotFoundException {
                     int columna = scanner.nextInt();
                     contador++;
                     scanner.nextLine();
+                    
+                    juego.jugar(fila, columna);
+                     
+                    if(fila == -1 && columna == -1) {
+                        String[][] tablero = juego.obtenerUltimoTablero();
+                        consola.imprimirTablero(tablero);
+                        
+                    } else {
+                        String[][][] tableros = juego.obtenerUltimosDosTableros();
 
-                    juego.jugar(fila, columna, contador);
-
-                    String[][] tablero1 = juego.obtenerTablero(contador - 1);
-                    String[][] tablero2 = juego.obtenerTablero(contador);
-
-                    consola.imprimirTablerosLadoALado(tablero1, tablero2);
-
+                        consola.imprimirTablerosLadoALado(tableros[0], tableros[1]);
+                    }
+                    
                     juegoTerminado = juego.juegoTerminado();
+
                     break;
                 case "x":
                     System.out.println("Adios. ¡Gracias por jugar!");
@@ -104,7 +109,7 @@ public static void main(String[] args) throws FileNotFoundException {
             System.out.println("Desea comenzar una nueva partida? S/N ");
             String opcion = scanner.nextLine();
 
-            if (opcion.equalsIgnoreCase("N")) {
+            if (!opcion.equalsIgnoreCase("S")) {
                 System.out.println("Adios. ¡Gracias por jugar!");
                 System.exit(0); // Salir del programa
             }
