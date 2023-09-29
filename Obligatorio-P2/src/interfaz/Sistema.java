@@ -11,6 +11,7 @@ import dominio.*;
 /**
  *
  * @author User
+ * 
  */
 public class Sistema {
 public static void main(String[] args) throws FileNotFoundException {
@@ -41,8 +42,13 @@ public static void main(String[] args) throws FileNotFoundException {
             case "c":
                 juego = new Juego();
                 Scanner in = new Scanner(System.in);
+                System.out.println("Ingrese cantidad de filas: ");
+                int filas = in.nextInt();
+                System.out.println("Ingrese cantidad de columnas: ");
+                int columnas = in.nextInt();
                 System.out.println("Ingrese nivel: ");
                 int nivel = in.nextInt();
+                juego.crearTableroAleatorio(filas, columnas, nivel);
                 juego.guardarTablero(juego.obtenerTableroActual());
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);

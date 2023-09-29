@@ -56,8 +56,8 @@ public class Juego {
        tablero = tablero.tableroDesdeArchivo();
     }
     
-    public void crearTableroAleatorio(int unaDificultad) {
-        tablero = tablero.tableroAleatorio(unaDificultad);
+    public void crearTableroAleatorio(int filas, int columnas, int nivel) {
+        tablero = tablero.tableroAleatorio(filas, columnas, nivel);
     }
     
     public void crearTableroPredefinido() {
@@ -137,17 +137,8 @@ public class Juego {
     public void borrarUltimoTablero() {
         this.historialTableros.borrarUltimoTablero();
     }
-    
-    /*
-        tenemos que guardar el tablero previo, los movimientos
-        y que esto se ejecute mientras se esta jugando, mostrar en la interfaz
-        el previo y resultante, luego verificar que el tablero no sea todo de un color,
-        luego mostrar solucion
-    
-    */
-    
-    public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {
 
+    public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {
         char simbolo = celda.charAt(0);
 
         switch (simbolo) {

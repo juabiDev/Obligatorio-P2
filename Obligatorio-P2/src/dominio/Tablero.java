@@ -7,12 +7,15 @@ package dominio;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+import java.util.Random;
 
 /**
  *
  * @author User
  */
 public class Tablero {
+
+    private static Juego juego;
     private int filas;
     private int columnas;
     private int nivel;
@@ -32,6 +35,7 @@ public class Tablero {
             this.columnas = columnas;
             this.tableritoActual = new String[this.filas][this.columnas];
         }
+        this.juego = new Juego();
     }
     
     private boolean validarFilasColumnas(int filas, int columnas, int nivel) {
@@ -64,7 +68,7 @@ public class Tablero {
         return this.tableritoActual;
     }
     
-    public static Tablero tableroAleatorio(int dificultad) {
+    /* public static Tablero tableroAleatorio(int dificultad) {
         String[][] tablero = {
             {"|A", "|A", "-R", "/A", "|R", "-R"},
             {"-R", "/A", "/A", "|A", "-R", "-R"},
@@ -77,11 +81,11 @@ public class Tablero {
         t.setTableritoActual(tablero);
             
         return t;
-    }
+    } */
     
    public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();
@@ -145,6 +149,40 @@ public class Tablero {
         return retorno;
     }
     
-    
+     public static Tablero tableroAleatorio(int filas, int columnas, int nivel) {
+        Tablero tablero = new Tablero(filas, columnas, nivel);
+        Random rand = new Random();
+
+        // Define los símbolos y colores posibles
+        String[] simbolos = {"|", "-", "\\", "/"};
+        String[] colores = {"R", "A"};
+
+        // Crea el tablero lleno de símbolos y colores aleatorios
+        String[][] tableroActual = new String[filas][columnas];
+        for (int i = 0; i < filas; i++) {
+            for (int j = 0; j < columnas; j++) {
+                String simbolo = simbolos[rand.nextInt(simbolos.length)];
+                String color = colores[rand.nextInt(colores.length)];
+                tableroActual[i][j] = simbolo + color;
+            }
+        }
+        tablero.setTableritoActual(tableroActual);
+
+        // Aplica movimientos aleatorios para generar el nivel requerido
+        for (int i = 0; i < nivel; i++) {
+            int fila = rand.nextInt(filas);
+            int columna = rand.nextInt(columnas);
+            aplicarMovimientoEnCelda(tablero, fila, columna);
+        }
+        return tablero;
+    }
+     
+     private static void aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) {
+        // Obtener el símbolo y color actual de la celda seleccionada
+        String celdaActual = tablero.getTableritoActual()[fila][columna];
+
+        juego.aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
+    }
+
  
 }
