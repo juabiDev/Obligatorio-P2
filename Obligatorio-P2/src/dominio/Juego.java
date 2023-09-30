@@ -6,6 +6,7 @@ package dominio;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -15,6 +16,7 @@ public class Juego {
     private Tablero tablero;
     private HistorialMov historialMovimientos;
     private HistorialTableros historialTableros;
+    private ArrayList<Movimiento> listaSolucion;
     private long tiempoInicio;
     private long tiempoFin;
     //private ArrayList<Camion> listaCamiones;
@@ -23,6 +25,7 @@ public class Juego {
         this.tablero = new Tablero();
         this.historialMovimientos = new HistorialMov();
         this.historialTableros = new HistorialTableros();
+        this.listaSolucion = new ArrayList<Movimiento>();
         this.tiempoInicio = System.currentTimeMillis();
         this.tiempoFin = System.currentTimeMillis();
     }
@@ -57,9 +60,74 @@ public class Juego {
     }
     
     public void crearTableroAleatorio(int filas, int columnas, int nivel) {
-        tablero = tablero.tableroAleatorio(filas, columnas, nivel);
+        
+        Tablero t = tablero.tableroAleatorio(filas, columnas, nivel);
+
+        Random rand = new Random();
+        // Define los símbolos y colores posibles
+        String[] simbolos = {"|", "-", "\\", "/"};
+        String[] colores = {"R", "A"};
+        
+        int contadorMovimientos = 0;
+                
+        // Aplica movimientos aleatorios para generar el nivel requerido
+        for (int i = 0; contadorMovimientos < nivel; i++) {
+            int fila = rand.nextInt(filas);
+            int columna = rand.nextInt(columnas);
+            boolean realizado = aplicarMovimientoEnCelda(t, fila, columna);
+            
+            if(realizado) {
+                contadorMovimientos++;
+            }
+                        
+        }
+     
+        
+        this.tablero = t;
+    }
+ 
+    private boolean aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) { 
+        // Obtener el símbolo y color actual de la celda seleccionada
+        
+        int posicionFila = fila + 1;
+        int posicionColumna = columna + 1;
+
+        boolean existe = existenMovimientos(posicionFila,posicionColumna);
+        
+        if(!existe) {
+            String celdaActual = tablero.getTableritoActual()[fila][columna];
+        
+            guardarSolucion(posicionFila, posicionColumna);
+
+            aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
+        }
+        
+        return !existe;
+
     }
     
+    public boolean existenMovimientos(int fila, int columna) {
+        boolean existe = false;
+        
+        for(Movimiento unMovimiento : this.listaSolucion) {
+            if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
+                existe = true;
+            }
+        }
+        
+        return existe;
+    }
+        
+    
+    public void guardarSolucion(int fila, int columna) { 
+        Movimiento m = new Movimiento(fila,columna);
+        this.listaSolucion.add(m);
+    }
+    
+    public ArrayList getSolucion() {
+        return this.listaSolucion;
+    }
+        
     public void crearTableroPredefinido() {
         tablero = tablero.tableroPredefinido();
     }
@@ -104,7 +172,7 @@ public class Juego {
             this.tiempoFin = System.currentTimeMillis();
         }
     }
-    
+       
     private String[][] copiarTablero(String[][] unTablero) {
         String[][] retorno = new String[unTablero.length][unTablero[0].length];
         
@@ -137,10 +205,10 @@ public class Juego {
     public void borrarUltimoTablero() {
         this.historialTableros.borrarUltimoTablero();
     }
-
+    
     public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {
         char simbolo = celda.charAt(0);
-
+        
         switch (simbolo) {
             case '|':
                 for (int i = 0; i < tableroNuevo.length; i++) {

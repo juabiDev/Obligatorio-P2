@@ -17,7 +17,7 @@ public class Sistema {
 public static void main(String[] args) throws FileNotFoundException {
     Scanner scanner = new Scanner(System.in);
     ConsolaSoliflips consola = new ConsolaSoliflips();
-    Juego juego;
+    Juego juego = new Juego();
 
     while (true) {
         // Mostrar el menú principal
@@ -26,21 +26,18 @@ public static void main(String[] args) throws FileNotFoundException {
 
         switch (opcion.toLowerCase()) {
             case "a":
-                juego = new Juego();
                 juego.crearTableroDeArchivo();
                 juego.guardarTablero(juego.obtenerTableroActual());
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);
                 break;
             case "b":
-                juego = new Juego();
                 juego.crearTableroPredefinido();
                 juego.guardarTablero(juego.obtenerTableroActual());
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);
                 break;
             case "c":
-                juego = new Juego();
                 Scanner in = new Scanner(System.in);
                 System.out.println("Ingrese cantidad de filas: ");
                 int filas = in.nextInt();
@@ -66,7 +63,6 @@ public static void main(String[] args) throws FileNotFoundException {
     public static void jugarPartida(Juego juego, ConsolaSoliflips consola, Scanner scanner) {
         int contador = 0;
         boolean juegoTerminado = false;
-
         while (!juegoTerminado) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
@@ -102,6 +98,7 @@ public static void main(String[] args) throws FileNotFoundException {
                     consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
                     break;
                 case "s":
+                    System.out.println(juego.getSolucion());
                     System.out.println("...");
                     break;
                 default:

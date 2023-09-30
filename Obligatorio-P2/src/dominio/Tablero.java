@@ -15,7 +15,6 @@ import java.util.Random;
  */
 public class Tablero {
 
-    private static Juego juego;
     private int filas;
     private int columnas;
     private int nivel;
@@ -35,7 +34,6 @@ public class Tablero {
             this.columnas = columnas;
             this.tableritoActual = new String[this.filas][this.columnas];
         }
-        this.juego = new Juego();
     }
     
     private boolean validarFilasColumnas(int filas, int columnas, int nivel) {
@@ -168,21 +166,8 @@ public class Tablero {
         }
         tablero.setTableritoActual(tableroActual);
 
-        // Aplica movimientos aleatorios para generar el nivel requerido
-        for (int i = 0; i < nivel; i++) {
-            int fila = rand.nextInt(filas);
-            int columna = rand.nextInt(columnas);
-            aplicarMovimientoEnCelda(tablero, fila, columna);
-        }
+
         return tablero;
     }
      
-     private static void aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) {
-        // Obtener el símbolo y color actual de la celda seleccionada
-        String celdaActual = tablero.getTableritoActual()[fila][columna];
-
-        juego.aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
-    }
-
- 
 }
