@@ -14,17 +14,14 @@ import java.util.Random;
  */
 public class Juego {
     private Tablero tablero;
-    private HistorialMov historialMovimientos;
-    private HistorialTableros historialTableros;
+    private Historial historiales;
     private ArrayList<Movimiento> listaSolucion;
     private long tiempoInicio;
     private long tiempoFin;
-    //private ArrayList<Camion> listaCamiones;
 
     public Juego() {
         this.tablero = new Tablero();
-        this.historialMovimientos = new HistorialMov();
-        this.historialTableros = new HistorialTableros();
+        this.historiales = new Historial();
         this.listaSolucion = new ArrayList<Movimiento>();
         this.tiempoInicio = System.currentTimeMillis();
         this.tiempoFin = System.currentTimeMillis();
@@ -44,15 +41,15 @@ public class Juego {
     }
 
     public void guardarHistorial(Movimiento m) {
-        historialMovimientos.agregarMovimiento(m);
+        historiales.agregarMovimiento(m);
     }
     
     public void guardarTablero(String[][] unTablero) {
-        this.historialTableros.agregarTablero(unTablero);
+        this.historiales.agregarTablero(unTablero);
     }
     
     public ArrayList obtenerHistorialMovimientos() {
-        return historialMovimientos.obtenerHistorialCompleto();
+        return historiales.obtenerMovimientos();
     }
     
     public void crearTableroDeArchivo() throws FileNotFoundException {
@@ -154,8 +151,7 @@ public class Juego {
 
                 aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
                 
-                this.historialTableros.agregarTablero(tableroNuevo);
-            
+                this.historiales.agregarTablero(tableroNuevo);
                 this.tablero.setTableritoActual(tableroNuevo);
                 
             } else {          
@@ -195,15 +191,15 @@ public class Juego {
     }
     
     public String[][] obtenerUltimoTablero() {
-        return historialTableros.obtenerUltimoTablero();
+        return historiales.obtenerUltimoTablero();
     }
     
     public String[][][] obtenerUltimosDosTableros() {
-        return historialTableros.obtenerUltimosDosTableros();
+        return historiales.obtenerUltimosDosTableros();
     }
     
     public void borrarUltimoTablero() {
-        this.historialTableros.borrarUltimoTablero();
+        this.historiales.borrarUltimoTablero();
     }
     
     public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {

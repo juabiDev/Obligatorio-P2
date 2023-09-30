@@ -11,19 +11,35 @@ import java.util.Arrays;
  *
  * @author User
  */
-public class HistorialTableros {
-    private ArrayList<String[][]> tableros = new ArrayList<>();
+class Historial {
+    private ArrayList<Movimiento> solucion;
+    private ArrayList<Movimiento> movimientos;
+    private ArrayList<String[][]> tableros;
     
-    public HistorialTableros() {
+    public Historial() {
+        this.solucion = new ArrayList<>();
+        this.movimientos = new ArrayList<>();
         this.tableros = new ArrayList<>();
     }
     
+    public void agregarMovimiento(Movimiento movimiento) {
+        movimientos.add(movimiento);
+    }
+    
+    public ArrayList obtenerMovimientos() {
+        return movimientos;
+    }
+    
     public void agregarTablero(String[][] unTablero) {
+        System.out.println("actualmente:"+tableros.size());
         // Copiar el tablero y agregar la copia al historial
         String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];
+        
+        
         for (int i = 0; i < unTablero.length; i++) {
             copiaTablero[i] = Arrays.copyOf(unTablero[i], unTablero[i].length);
         }
+        
         tableros.add(copiaTablero);
     }
     
@@ -55,7 +71,7 @@ public class HistorialTableros {
         return ultimas;
     }
     
-    public ArrayList obtenerHistorialCompleto() {
+    public ArrayList obtenerTableros() {
         return tableros;
     }
     
@@ -66,10 +82,6 @@ public class HistorialTableros {
             System.out.println("No hay tablero anterior");
         }
     }
+
     
-    public void imprimirLista() {
-        for (String[][] unTablero : tableros) {
-            System.out.println(Arrays.toString(unTablero[0]));
-        }
-    }
 }
