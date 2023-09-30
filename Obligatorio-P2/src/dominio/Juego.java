@@ -27,19 +27,23 @@ public class Juego {
         this.tiempoFin = System.currentTimeMillis();
     }
     
+    /* --- Tiempo de Juego --- */
+    
     public void iniciarJuego() {
         tiempoInicio = System.currentTimeMillis();
     }
+    
+    public long obtenerTiempoTotal() {
+        return tiempoFin - tiempoInicio;
+    }
+    
+    /* --- Historiales --- */
     
     public void guardarMovimiento(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorial(m);
     }
     
-    public long obtenerTiempoTotal() {
-        return tiempoFin - tiempoInicio;
-    }
-
     public void guardarHistorial(Movimiento m) {
         historiales.agregarMovimiento(m);
     }
@@ -51,6 +55,30 @@ public class Juego {
     public ArrayList obtenerHistorialMovimientos() {
         return historiales.obtenerMovimientos();
     }
+    
+    public String[][] obtenerUltimoTablero() {
+        return historiales.obtenerUltimoTablero();
+    }
+    
+    public String[][][] obtenerUltimosDosTableros() {
+        return historiales.obtenerUltimosDosTableros();
+    }
+    
+    public void borrarUltimoTablero() {
+        this.historiales.borrarUltimoTablero();
+    }
+    
+    public void guardarSolucion(int fila, int columna) { 
+        Movimiento m = new Movimiento(fila,columna);
+        this.listaSolucion.add(m);
+    }
+    
+    public ArrayList getSolucion() {
+        return this.listaSolucion;
+    }
+    
+    
+    /* --- Creación de Tableros --- */
     
     public void crearTableroDeArchivo() throws FileNotFoundException {
        tablero = tablero.tableroDesdeArchivo();
@@ -78,53 +106,10 @@ public class Juego {
             }
                         
         }
-     
         
         this.tablero = t;
     }
- 
-    private boolean aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) { 
-        // Obtener el símbolo y color actual de la celda seleccionada
-        
-        int posicionFila = fila + 1;
-        int posicionColumna = columna + 1;
 
-        boolean existe = existenMovimientos(posicionFila,posicionColumna);
-        
-        if(!existe) {
-            String celdaActual = tablero.getTableritoActual()[fila][columna];
-        
-            guardarSolucion(posicionFila, posicionColumna);
-
-            aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
-        }
-        
-        return !existe;
-
-    }
-    
-    public boolean existenMovimientos(int fila, int columna) {
-        boolean existe = false;
-        
-        for(Movimiento unMovimiento : this.listaSolucion) {
-            if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
-                existe = true;
-            }
-        }
-        
-        return existe;
-    }
-        
-    
-    public void guardarSolucion(int fila, int columna) { 
-        Movimiento m = new Movimiento(fila,columna);
-        this.listaSolucion.add(m);
-    }
-    
-    public ArrayList getSolucion() {
-        return this.listaSolucion;
-    }
-        
     public void crearTableroPredefinido() {
         tablero = tablero.tableroPredefinido();
     }
@@ -132,6 +117,8 @@ public class Juego {
     public String[][] obtenerTableroActual() {
         return this.tablero.getTableritoActual();
     }
+    
+    /* --- Jugabilidad --- */
     
     public void jugar(int fila, int columna) {
         int posicionFila = fila - 1;
@@ -168,18 +155,6 @@ public class Juego {
             this.tiempoFin = System.currentTimeMillis();
         }
     }
-       
-    private String[][] copiarTablero(String[][] unTablero) {
-        String[][] retorno = new String[unTablero.length][unTablero[0].length];
-        
-        for (int i = 0; i < unTablero.length; i++) {
-            for (int j = 0; j < unTablero[0].length; j++) {
-                retorno[i][j] = unTablero[i][j];
-            }
-        }
-        
-        return retorno;
-    }
     
     public boolean juegoTerminado() {
         boolean retorno = this.tablero.verificarTablero();
@@ -188,18 +163,6 @@ public class Juego {
         }
 
         return retorno;
-    }
-    
-    public String[][] obtenerUltimoTablero() {
-        return historiales.obtenerUltimoTablero();
-    }
-    
-    public String[][][] obtenerUltimosDosTableros() {
-        return historiales.obtenerUltimosDosTableros();
-    }
-    
-    public void borrarUltimoTablero() {
-        this.historiales.borrarUltimoTablero();
     }
     
     public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {
@@ -254,7 +217,54 @@ public class Juego {
         }
     }
 
+    /* --- Funciones Auxiliares --- */
+    
+    private String[][] copiarTablero(String[][] unTablero) {
+        String[][] retorno = new String[unTablero.length][unTablero[0].length];
+        
+        for (int i = 0; i < unTablero.length; i++) {
+            for (int j = 0; j < unTablero[0].length; j++) {
+                retorno[i][j] = unTablero[i][j];
+            }
+        }
+        
+        return retorno;
+    }
+        
     private String cambiarColorOpuesto(String colorActual) {
         return colorActual.equals("R") ? "A" : "R";
     }
+    
+    private boolean aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) { 
+        // Obtener el símbolo y color actual de la celda seleccionada
+        
+        int posicionFila = fila + 1;
+        int posicionColumna = columna + 1;
+
+        boolean existe = existenMovimientos(posicionFila,posicionColumna);
+        
+        if(!existe) {
+            String celdaActual = tablero.getTableritoActual()[fila][columna];
+        
+            guardarSolucion(posicionFila, posicionColumna);
+
+            aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
+        }
+        
+        return !existe;
+
+    }
+    
+    private boolean existenMovimientos(int fila, int columna) {
+        boolean existe = false;
+        
+        for(Movimiento unMovimiento : this.listaSolucion) {
+            if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
+                existe = true;
+            }
+        }
+        
+        return existe;
+    }
+    
 }
