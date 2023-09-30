@@ -26,12 +26,23 @@ class Historial {
         movimientos.add(movimiento);
     }
     
-    public ArrayList obtenerMovimientos() {
+    public ArrayList<Movimiento> obtenerMovimientos() {
         return movimientos;
     }
     
+    public void agregarSolucion(Movimiento movimiento) {
+        solucion.add(movimiento);
+    }
+        
+    public ArrayList<Movimiento> obtenerSolucion() {
+        ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
+        
+        copiaSolucion.addAll(obtenerMovimientos());
+        
+        return copiaSolucion;
+    }
+    
     public void agregarTablero(String[][] unTablero) {
-        System.out.println("actualmente:"+tableros.size());
         // Copiar el tablero y agregar la copia al historial
         String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];
         

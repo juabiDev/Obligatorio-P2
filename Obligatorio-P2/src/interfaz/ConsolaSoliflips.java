@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class ConsolaSoliflips {
     public void mostrarMenuPrincipal() {
         System.out.println("Bienvenido al juego Soliflips!");
-        System.out.println("Seleccione una opción:");
+        System.out.println("Seleccione una opción de tablero para comenzar:");
         System.out.println("a) Cargar datos desde 'datos.txt'");
         System.out.println("b) Usar el tablero predefinido");
         System.out.println("c) Generar un tablero aleatorio resoluble");

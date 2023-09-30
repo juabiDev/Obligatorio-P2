@@ -17,7 +17,7 @@ public class Sistema {
 public static void main(String[] args) throws FileNotFoundException {
     Scanner scanner = new Scanner(System.in);
     ConsolaSoliflips consola = new ConsolaSoliflips();
-    Juego juego = new Juego();
+    Juego juego;
 
     while (true) {
         // Mostrar el menú principal
@@ -26,18 +26,21 @@ public static void main(String[] args) throws FileNotFoundException {
 
         switch (opcion.toLowerCase()) {
             case "a":
+                juego = new Juego();
                 juego.crearTableroDeArchivo();
                 juego.guardarTablero(juego.obtenerTableroActual());
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);
                 break;
             case "b":
+                juego = new Juego();
                 juego.crearTableroPredefinido();
                 juego.guardarTablero(juego.obtenerTableroActual());
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);
                 break;
             case "c":
+                juego = new Juego();
                 Scanner in = new Scanner(System.in);
                 System.out.println("Ingrese cantidad de filas: ");
                 int filas = in.nextInt();
@@ -50,9 +53,6 @@ public static void main(String[] args) throws FileNotFoundException {
                 consola.imprimirTablero(juego.obtenerTableroActual());
                 jugarPartida(juego, consola, scanner);
                 break;
-            case "s":
-                System.out.println("Adios. ¡Gracias por jugar!");
-                return; // Salir del programa
             default:
                 System.out.println("Opción no válida. Por favor, seleccione una opción válida.");
                 break;
@@ -69,8 +69,9 @@ public static void main(String[] args) throws FileNotFoundException {
 
             switch (opcion.toLowerCase()) {
                 case "m":
-                    System.out.println("Ingrese Movimiento: fila columna");
+                    System.out.println("Ingrese posición fila:");
                     int fila = scanner.nextInt();
+                    System.out.println("Ingrese posición columna:");
                     int columna = scanner.nextInt();
                     contador++;
                     scanner.nextLine();
@@ -99,7 +100,6 @@ public static void main(String[] args) throws FileNotFoundException {
                     break;
                 case "s":
                     System.out.println(juego.getSolucion());
-                    System.out.println("...");
                     break;
                 default:
                     System.out.println("Opción no válida. Por favor, seleccione una opción válida.");

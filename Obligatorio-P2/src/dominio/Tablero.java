@@ -6,6 +6,7 @@ package dominio;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.Random;
 
@@ -19,12 +20,14 @@ public class Tablero {
     private int columnas;
     private int nivel;
     private String [][] tableritoActual;
+    private ArrayList<Movimiento> solucionTablero;
     
     public Tablero() { // el tablero tiene como minimo 3 filas y 3 columnas
         this.filas = 3;
         this.columnas = 3;
         this.nivel = 1;
         this.tableritoActual = new String[this.filas][this.columnas];
+        this.solucionTablero = new ArrayList<>();
     }
     
     public Tablero(int filas, int columnas, int nivel) {
@@ -34,6 +37,14 @@ public class Tablero {
             this.columnas = columnas;
             this.tableritoActual = new String[this.filas][this.columnas];
         }
+    }
+    
+    public ArrayList<Movimiento> getSolucionTablero() {
+        return this.solucionTablero;
+    }
+
+    public void setSolucionTablero(ArrayList<Movimiento> solucionTablero) {
+        this.solucionTablero = solucionTablero;
     }
     
     private boolean validarFilasColumnas(int filas, int columnas, int nivel) {
@@ -66,22 +77,7 @@ public class Tablero {
         return this.tableritoActual;
     }
     
-    /* public static Tablero tableroAleatorio(int dificultad) {
-        String[][] tablero = {
-            {"|A", "|A", "-R", "/A", "|R", "-R"},
-            {"-R", "/A", "/A", "|A", "-R", "-R"},
-            {"-R", "-R", "|A", "-R", "/R", "-R"},
-            {"\\R", "-R", "|R", "\\R", "|A", "|R"},
-            {"\\R", "/R", "/R", "|A", "/A", "\\A"}
-        };
-        
-        Tablero t = new Tablero(5, 6, 3);
-        t.setTableritoActual(tablero);
-            
-        return t;
-    } */
-    
-   public static Tablero tableroDesdeArchivo() throws FileNotFoundException {
+   public Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
             Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2.1\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
@@ -104,10 +100,21 @@ public class Tablero {
                 }
             }
             int nivel = input.nextInt();
+            
+            ArrayList<Movimiento> aux = new ArrayList<>();
+            
+            for(int i = 0; i < nivel; i++) {
+                int fila = input.nextInt();
+                int columna = input.nextInt();
+                Movimiento movimiento = new Movimiento(fila,columna);
+                aux.add(movimiento);
+            }
+            
             // Cerrar el archivo
             input.close();
             
             Tablero t = new Tablero(m, n, nivel);
+            t.setSolucionTablero(aux);
             t.setTableritoActual(tablero);
             
             return t;
@@ -123,6 +130,17 @@ public class Tablero {
         };
         
         Tablero t = new Tablero(5, 6, 3);
+        ArrayList<Movimiento> solucionTablero = new ArrayList<>();
+        
+        Movimiento m1 = new Movimiento(4,4);
+        Movimiento m2 = new Movimiento(5,6);
+        Movimiento m3 = new Movimiento(5,4);
+
+        solucionTablero.add(m1);
+        solucionTablero.add(m2);
+        solucionTablero.add(m3);
+
+        t.setSolucionTablero(solucionTablero);
         t.setTableritoActual(tablero);
             
         return t;
@@ -154,13 +172,13 @@ public class Tablero {
         // Define los símbolos y colores posibles
         String[] simbolos = {"|", "-", "\\", "/"};
         String[] colores = {"R", "A"};
+        String color = colores[rand.nextInt(colores.length)];
 
         // Crea el tablero lleno de símbolos y colores aleatorios
         String[][] tableroActual = new String[filas][columnas];
         for (int i = 0; i < filas; i++) {
             for (int j = 0; j < columnas; j++) {
                 String simbolo = simbolos[rand.nextInt(simbolos.length)];
-                String color = colores[rand.nextInt(colores.length)];
                 tableroActual[i][j] = simbolo + color;
             }
         }

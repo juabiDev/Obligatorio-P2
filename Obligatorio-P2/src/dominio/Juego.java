@@ -6,6 +6,7 @@ package dominio;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -15,14 +16,12 @@ import java.util.Random;
 public class Juego {
     private Tablero tablero;
     private Historial historiales;
-    private ArrayList<Movimiento> listaSolucion;
     private long tiempoInicio;
     private long tiempoFin;
 
     public Juego() {
         this.tablero = new Tablero();
         this.historiales = new Historial();
-        this.listaSolucion = new ArrayList<Movimiento>();
         this.tiempoInicio = System.currentTimeMillis();
         this.tiempoFin = System.currentTimeMillis();
     }
@@ -41,10 +40,10 @@ public class Juego {
     
     public void guardarMovimiento(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
-        guardarHistorial(m);
+        guardarHistorialMov(m);
     }
     
-    public void guardarHistorial(Movimiento m) {
+    public void guardarHistorialMov(Movimiento m) {
         historiales.agregarMovimiento(m);
     }
     
@@ -70,11 +69,15 @@ public class Juego {
     
     public void guardarSolucion(int fila, int columna) { 
         Movimiento m = new Movimiento(fila,columna);
-        this.listaSolucion.add(m);
+        guardarHistorialSol(m);
     }
     
-    public ArrayList getSolucion() {
-        return this.listaSolucion;
+    public void guardarHistorialSol(Movimiento m) {
+        historiales.agregarSolucion(m);
+    }
+        
+    public ArrayList<Movimiento> getSolucion() {
+        return historiales.obtenerSolucion();
     }
     
     
@@ -82,12 +85,16 @@ public class Juego {
     
     public void crearTableroDeArchivo() throws FileNotFoundException {
        tablero = tablero.tableroDesdeArchivo();
+       
+       tablero.getSolucionTablero().forEach((element) -> {
+           guardarSolucion(element.getFila(),element.getColumna());
+       });
     }
     
     public void crearTableroAleatorio(int filas, int columnas, int nivel) {
         
         Tablero t = tablero.tableroAleatorio(filas, columnas, nivel);
-
+        
         Random rand = new Random();
         // Define los símbolos y colores posibles
         String[] simbolos = {"|", "-", "\\", "/"};
@@ -102,6 +109,7 @@ public class Juego {
             boolean realizado = aplicarMovimientoEnCelda(t, fila, columna);
             
             if(realizado) {
+                guardarSolucion(fila+1, columna+1);
                 contadorMovimientos++;
             }
                         
@@ -112,6 +120,10 @@ public class Juego {
 
     public void crearTableroPredefinido() {
         tablero = tablero.tableroPredefinido();
+        
+        tablero.getSolucionTablero().forEach((element) -> {
+           guardarSolucion(element.getFila(),element.getColumna());
+        });
     }
     
     public String[][] obtenerTableroActual() {
@@ -159,6 +171,7 @@ public class Juego {
     public boolean juegoTerminado() {
         boolean retorno = this.tablero.verificarTablero();
         if(retorno) {
+            
             this.tiempoFin = System.currentTimeMillis();
         }
 
@@ -245,9 +258,6 @@ public class Juego {
         
         if(!existe) {
             String celdaActual = tablero.getTableritoActual()[fila][columna];
-        
-            guardarSolucion(posicionFila, posicionColumna);
-
             aplicarMovimiento(celdaActual, fila, columna, tablero.getTableritoActual());
         }
         
@@ -258,7 +268,7 @@ public class Juego {
     private boolean existenMovimientos(int fila, int columna) {
         boolean existe = false;
         
-        for(Movimiento unMovimiento : this.listaSolucion) {
+        for(Movimiento unMovimiento : getSolucion()) {
             if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
                 existe = true;
             }
