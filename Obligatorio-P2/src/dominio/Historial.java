@@ -11,7 +11,7 @@ import java.util.Arrays;
  *
  * @author User
  */
-class Historial {
+public class Historial {
     private ArrayList<Movimiento> solucion;
     private ArrayList<Movimiento> movimientos;
     private ArrayList<String[][]> tableros;
@@ -34,7 +34,7 @@ class Historial {
         solucion.add(movimiento);
     }
         
-    public ArrayList<Movimiento> obtenerSolucion() {
+    public ArrayList<Movimiento> getSolucion() {
         ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
         
         copiaSolucion.addAll(obtenerMovimientos());
@@ -103,7 +103,15 @@ class Historial {
         } else {
             throw new RuntimeException("No se puede retroceder, porque estamos en el tablero inicial.");
         }
-
+    }
+    
+    public void guardarSolucion(int fila, int columna) { 
+        Movimiento m = new Movimiento(fila,columna);
+        guardarHistorialSol(m);
+    }
+    
+    public void guardarHistorialSol(Movimiento m) {
+        agregarSolucion(m);
     }
 
     

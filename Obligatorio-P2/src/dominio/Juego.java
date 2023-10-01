@@ -6,7 +6,6 @@ package dominio;
 
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -25,7 +24,15 @@ public class Juego {
         this.tiempoInicio = System.currentTimeMillis();
         this.tiempoFin = System.currentTimeMillis();
     }
+
+    public Historial getHistoriales() {
+        return historiales;
+    }
     
+    public String[][] obtenerTableroActual() {
+        return this.tablero.getTableritoActual();
+    }
+        
     /* --- Tiempo de Juego --- */
     
     public void iniciarJuego() {
@@ -36,18 +43,7 @@ public class Juego {
         return tiempoFin - tiempoInicio;
     }
     
-    /* --- Historiales --- */
-    
-    /*
-    public void guardarMovimiento(int fila, int columna) {
-        Movimiento m = new Movimiento(fila,columna);
-        guardarHistorialMov(m);
-    }
-    
-    public void guardarHistorialMov(Movimiento m) {
-        historiales.agregarMovimiento(m);
-    }
-    */
+    /* --- Historiales desde Sistema --- */
     public void guardarTablero(String[][] unTablero) {
         this.historiales.agregarTablero(unTablero);
     }
@@ -63,20 +59,6 @@ public class Juego {
     public String[][][] obtenerUltimosDosTableros() {
         return historiales.obtenerUltimosDosTableros();
     }
-
-    public void guardarSolucion(int fila, int columna) { 
-        Movimiento m = new Movimiento(fila,columna);
-        guardarHistorialSol(m);
-    }
-    
-    public void guardarHistorialSol(Movimiento m) {
-        historiales.agregarSolucion(m);
-    }
-        
-    public ArrayList<Movimiento> getSolucion() {
-        return historiales.obtenerSolucion();
-    }
-    
     
     /* --- Creación de Tableros --- */
     
@@ -84,7 +66,7 @@ public class Juego {
        tablero = tablero.tableroDesdeArchivo();
        
        tablero.getSolucionTablero().forEach((element) -> {
-           guardarSolucion(element.getFila(),element.getColumna());
+           historiales.guardarSolucion(element.getFila(),element.getColumna());
        });
     }
     
@@ -93,9 +75,6 @@ public class Juego {
         Tablero t = tablero.tableroAleatorio(filas, columnas, nivel);
         
         Random rand = new Random();
-        // Define los símbolos y colores posibles
-        String[] simbolos = {"|", "-", "\\", "/"};
-        String[] colores = {"R", "A"};
         
         int contadorMovimientos = 0;
                 
@@ -106,12 +85,10 @@ public class Juego {
             boolean realizado = aplicarMovimientoEnCelda(t, fila, columna);
             
             if(realizado) {
-                guardarSolucion(fila+1, columna+1);
+                historiales.guardarSolucion(fila+1, columna+1);
                 contadorMovimientos++;
-            }
-                        
+            }         
         }
-        
         this.tablero = t;
     }
 
@@ -119,12 +96,8 @@ public class Juego {
         tablero = tablero.tableroPredefinido();
         
         tablero.getSolucionTablero().forEach((element) -> {
-           guardarSolucion(element.getFila(),element.getColumna());
+           historiales.guardarSolucion(element.getFila(),element.getColumna());
         });
-    }
-    
-    public String[][] obtenerTableroActual() {
-        return this.tablero.getTableritoActual();
     }
     
     /* --- Jugabilidad --- */
@@ -137,7 +110,6 @@ public class Juego {
         boolean condicion3 = fila == -1 && columna == -1;
         
         try {
-            
             if ((condicion1 && condicion2) || condicion3) {
                 historiales.guardarMovimiento(fila, columna);
     
@@ -160,20 +132,20 @@ public class Juego {
 
                     this.tablero.setTableritoActual(tableroNuevo);
                 }
-
-
                 this.tiempoFin = System.currentTimeMillis();
+            } else {
+                historiales.guardarMovimiento(fila, columna);
+                throw new RuntimeException("Movimiento inválido.");
             }
         } catch(RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
-
     }
     
     public boolean juegoTerminado() {
         boolean retorno = this.tablero.verificarTablero();
-        if(retorno) {
-            
+        
+        if(retorno) {      
             this.tiempoFin = System.currentTimeMillis();
         }
 
@@ -238,11 +210,11 @@ public class Juego {
         String[][] retorno = new String[unTablero.length][unTablero[0].length];
         
         for (int i = 0; i < unTablero.length; i++) {
+           // ME SUGIERE: System.arraycopy(unTablero[i], 0, retorno[i], 0, unTablero[0].length);
             for (int j = 0; j < unTablero[0].length; j++) {
                 retorno[i][j] = unTablero[i][j];
             }
         }
-        
         return retorno;
     }
         
@@ -251,8 +223,6 @@ public class Juego {
     }
     
     private boolean aplicarMovimientoEnCelda(Tablero tablero, int fila, int columna) { 
-        // Obtener el símbolo y color actual de la celda seleccionada
-        
         int posicionFila = fila + 1;
         int posicionColumna = columna + 1;
 
@@ -264,13 +234,12 @@ public class Juego {
         }
         
         return !existe;
-
     }
     
     private boolean existenMovimientos(int fila, int columna) {
         boolean existe = false;
         
-        for(Movimiento unMovimiento : getSolucion()) {
+        for(Movimiento unMovimiento : historiales.getSolucion()) {
             if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
                 existe = true;
             }
@@ -278,5 +247,4 @@ public class Juego {
         
         return existe;
     }
-    
 }

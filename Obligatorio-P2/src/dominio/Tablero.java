@@ -31,11 +31,15 @@ public class Tablero {
     }
     
     public Tablero(int filas, int columnas, int nivel) {
-        boolean valido = validarFilasColumnas(filas, columnas, nivel);   
-        if(valido) {
-            this.filas = filas;
-            this.columnas = columnas;
-            this.tableritoActual = new String[this.filas][this.columnas];
+        try {
+            boolean valido = validarTablero(filas, columnas, nivel);
+            if (valido) {
+                this.filas = filas;
+                this.columnas = columnas;
+                this.tableritoActual = new String[this.filas][this.columnas];
+            }
+        } catch (RuntimeException e) {
+             throw new RuntimeException(e.getMessage());
         }
     }
     
@@ -47,13 +51,31 @@ public class Tablero {
         this.solucionTablero = solucionTablero;
     }
     
-    private boolean validarFilasColumnas(int filas, int columnas, int nivel) {
+    private boolean validarTablero(int filas, int columnas, int nivel) {
+        boolean condFilas = (filas >= 3 && filas <= 9);
+        boolean condCols = (columnas >= 3 && columnas <= 9);
+        boolean condNivel = (nivel >= 1 && nivel <= 8);
         boolean valido = false;
         
-        if((filas >= 3 && filas <= 9) && (columnas >= 3 && columnas <= 9) && (nivel >= 1 && nivel <= 8)) {
-           valido = true;
+        if (condFilas && condCols && condNivel) {
+            valido = true;
+        } else {
+            String mensajeError = "Errores de validación:\n";
+
+            if (!condFilas) {
+                mensajeError += "- Cantidad de filas inválida (entre 3 y 9).\n";
+            }
+
+            if (!condCols) {
+                 mensajeError += "- Cantidad de columnas inválida (entre 3 y 9).\n";
+            }
+
+            if (!condNivel) {
+                mensajeError += "- Nivel inválido (entre 1 y 8).\n";
+            }
+
+            throw new RuntimeException(mensajeError);
         }
-        
         return valido;
     }
     
