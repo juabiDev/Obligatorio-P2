@@ -61,7 +61,6 @@ public class Sistema {
 }
 
     public static void jugarPartida(Juego juego, ConsolaSoliflips consola, Scanner scanner) {
-        int contador = 0;
         boolean juegoTerminado = false;
         while (!juegoTerminado) {
             consola.mostrarSubMenu();
@@ -69,32 +68,29 @@ public class Sistema {
 
             switch (opcion.toLowerCase()) {
                 case "m":
-                    System.out.println("Ingrese posición fila:");
-                    int fila = scanner.nextInt();
-                    System.out.println("Ingrese posición columna:");
-                    int columna = scanner.nextInt();
-                    contador++;
-                    scanner.nextLine();
+                    int[] posicion = obtenerEntradas(scanner, "Ingrese posición fila:", "Ingrese posición columna:");
+                    int fila = posicion[0];
+                    int columna = posicion[1];
+                    System.out.println("FILA " + fila + "Y COL " + columna);
                     
                     try {
                         juego.jugar(fila, columna);
+                        if(fila == -1 && columna == -1) {
+                            String[][] tablero = juego.obtenerUltimoTablero();
+                            consola.imprimirTablero(tablero);
+
+                        } else {
+                            String[][][] tableros = juego.obtenerUltimosDosTableros();
+
+                            consola.imprimirTablerosLadoALado(tableros[0], tableros[1]);
+                        }
                     } catch(RuntimeException e) {
                         System.err.println("Error: "+e.getMessage());
-                    }
-                     
-                    if(fila == -1 && columna == -1) {
-                        String[][] tablero = juego.obtenerUltimoTablero();
-                        consola.imprimirTablero(tablero);
-                        
-                    } else {
-                        String[][][] tableros = juego.obtenerUltimosDosTableros();
-
-                        consola.imprimirTablerosLadoALado(tableros[0], tableros[1]);
                     }
                     
                     juegoTerminado = juego.juegoTerminado();
 
-                    break;
+                break;
                 case "x":
                     System.out.println("Adios. ¡Gracias por jugar!");
                     juegoTerminado = true;
@@ -128,4 +124,27 @@ public class Sistema {
         // Puedes realizar acciones adicionales si es necesario
     }
     
+    public static int[] obtenerEntradas(Scanner scanner, String... mensajes) {
+        int[] entradas = new int[mensajes.length];
+            boolean mientras = true;
+            for (int i = 0; i < mensajes.length && mientras; i++) {
+                System.out.println(mensajes[i]);
+                String entradaStr = scanner.nextLine();
+                // Verificar si la entrada es un número entero válido
+                try {
+                    int entrada = Integer.parseInt(entradaStr);
+                    if (!(Character.isDigit(entradaStr.charAt(0)) && entrada >= 1 && entrada <= 9)) {
+                        throw new NumberFormatException();
+                    }
+                    entradas[i] = entrada;
+                    if(i == mensajes.length) {
+                        mientras = false; 
+                    }
+                } catch (NumberFormatException e) {
+                    i = i-1;
+                    System.out.println("Entrada no válida. Ingrese un número entero válido ");
+                }
+            }
+        return entradas;
+    }
 }

@@ -79,7 +79,7 @@ public class Tablero {
     
    public Tablero tableroDesdeArchivo() throws FileNotFoundException {
             // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2.1\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+            Scanner input = new Scanner(new File("C:\\Users\\Dell_\\Desktop\\Prog2\\Obligatorio-P2\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
 
             // Leer las dimensiones del tablero (m filas x n columnas)
             int m = input.nextInt();
