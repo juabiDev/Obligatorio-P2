@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="normalize.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="container">
+        <h1>Fabi Translate</h1>
+        <div class="message-container">
+            <textarea name="message" id="message" placeholder="Escribe Aquí..."></textarea>
+            <button id="traducir" type="button">Traducir</button>
+            <select class="primer-select" name="idioma-source" id="idioma-source">
+            </select>
+        </div>
+        <div class="message-container">
+            <textarea disabled name="translate" id="translate" placeholder="Traducción"></textarea>
+            <select name="idioma-target" id="idioma-target">
+            </select>
+        </div>
+    </main>
+    <div id="message-error" class="none">
+        <p>Lo sentimos, estamos fuera de servicio</p>
+        <p id="error"></p>
+    </div>
+
+
+            
+    <script src="app.js"></script>
+</body>
+</html>
