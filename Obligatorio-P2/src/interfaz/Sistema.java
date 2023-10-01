@@ -14,7 +14,7 @@ import dominio.*;
  * 
  */
 public class Sistema {
-public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) throws FileNotFoundException {
     Scanner scanner = new Scanner(System.in);
     ConsolaSoliflips consola = new ConsolaSoliflips();
     Juego juego;
@@ -76,7 +76,11 @@ public static void main(String[] args) throws FileNotFoundException {
                     contador++;
                     scanner.nextLine();
                     
-                    juego.jugar(fila, columna);
+                    try {
+                        juego.jugar(fila, columna);
+                    } catch(RuntimeException e) {
+                        System.err.println("Error: "+e.getMessage());
+                    }
                      
                     if(fila == -1 && columna == -1) {
                         String[][] tablero = juego.obtenerUltimoTablero();
@@ -119,5 +123,9 @@ public static void main(String[] args) throws FileNotFoundException {
         }
     }
 
-
+    public void imprimirError(Exception e) {
+        System.err.println("Error: " + e.getMessage());
+        // Puedes realizar acciones adicionales si es necesario
+    }
+    
 }

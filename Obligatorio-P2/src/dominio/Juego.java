@@ -38,6 +38,7 @@ public class Juego {
     
     /* --- Historiales --- */
     
+    /*
     public void guardarMovimiento(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorialMov(m);
@@ -46,7 +47,7 @@ public class Juego {
     public void guardarHistorialMov(Movimiento m) {
         historiales.agregarMovimiento(m);
     }
-    
+    */
     public void guardarTablero(String[][] unTablero) {
         this.historiales.agregarTablero(unTablero);
     }
@@ -62,11 +63,7 @@ public class Juego {
     public String[][][] obtenerUltimosDosTableros() {
         return historiales.obtenerUltimosDosTableros();
     }
-    
-    public void borrarUltimoTablero() {
-        this.historiales.borrarUltimoTablero();
-    }
-    
+
     public void guardarSolucion(int fila, int columna) { 
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorialSol(m);
@@ -139,33 +136,38 @@ public class Juego {
         boolean condicion2 = posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas();
         boolean condicion3 = fila == -1 && columna == -1;
         
-        if ((condicion1 && condicion2) || condicion3) {
-
+        try {
             
-            if(!(fila == -1 && columna == -1)) {
-                String[][] tableroPrevio = this.obtenerUltimoTablero();
-                String[][] tableroNuevo = copiarTablero(tableroPrevio);
+            if ((condicion1 && condicion2) || condicion3) {
+                historiales.guardarMovimiento(fila, columna);
+    
+                if(!(fila == -1 && columna == -1)) {
+                    String[][] tableroPrevio = this.obtenerUltimoTablero();
+                    String[][] tableroNuevo = copiarTablero(tableroPrevio);
 
-                String celda = tableroNuevo[posicionFila][posicionColumna];
+                    String celda = tableroNuevo[posicionFila][posicionColumna];
 
-                aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
-                
-                this.historiales.agregarTablero(tableroNuevo);
-                this.tablero.setTableritoActual(tableroNuevo);
-                
-            } else {          
-                this.borrarUltimoTablero();
-                
-                String[][] tableroPrevio = this.obtenerUltimoTablero();
-                String[][] tableroNuevo = copiarTablero(tableroPrevio);
-                
-                this.tablero.setTableritoActual(tableroNuevo);
+                    aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
+
+                    this.historiales.agregarTablero(tableroNuevo);
+                    this.tablero.setTableritoActual(tableroNuevo);
+
+                } else {          
+                    historiales.borrarUltimoTablero();
+
+                    String[][] tableroPrevio = this.obtenerUltimoTablero();
+                    String[][] tableroNuevo = copiarTablero(tableroPrevio);
+
+                    this.tablero.setTableritoActual(tableroNuevo);
+                }
+
+
+                this.tiempoFin = System.currentTimeMillis();
             }
-            
-            guardarMovimiento(fila, columna);
-            
-            this.tiempoFin = System.currentTimeMillis();
+        } catch(RuntimeException e) {
+            throw new RuntimeException(e.getMessage());
         }
+
     }
     
     public boolean juegoTerminado() {

@@ -86,12 +86,24 @@ class Historial {
         return tableros;
     }
     
+    public void guardarMovimiento(int fila, int columna) {
+        Movimiento m = new Movimiento(fila,columna);
+        guardarHistorialMov(m);
+    }
+    
+    public void guardarHistorialMov(Movimiento m) {
+       agregarMovimiento(m);
+    }
+    
     public void borrarUltimoTablero() {
-        if(tableros.size() > 1) {
+        int cantidadDeTableros = this.obtenerTableros().size();
+        
+        if (cantidadDeTableros > 1) {
             tableros.remove(tableros.size() - 1);
         } else {
-            System.out.println("No hay tablero anterior");
+            throw new RuntimeException("No se puede retroceder, porque estamos en el tablero inicial.");
         }
+
     }
 
     
