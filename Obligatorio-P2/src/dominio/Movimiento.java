@@ -36,4 +36,10 @@ public class Movimiento {
         return "("+fila+","+columna+")";
     }
     
+    @Override
+    public boolean equals(Object obj) {
+        Movimiento otroObjeto = (Movimiento) obj;
+        return this.getFila() == otroObjeto.getFila() && this.getColumna() == otroObjeto.getColumna();
+    }
+    
 }

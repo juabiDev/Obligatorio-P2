@@ -6,6 +6,8 @@ package dominio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  *
@@ -33,13 +35,31 @@ public class Historial {
     public void agregarSolucion(Movimiento movimiento) {
         solucion.add(movimiento);
     }
-        
+    
     public ArrayList<Movimiento> getSolucion() {
+        // To-Do : falta contemplar los -1 -1 (ojo con este ultimo)
         ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
-        
         copiaSolucion.addAll(obtenerMovimientos());
         
-        return copiaSolucion;
+        ArrayList<Movimiento> copiaSolucionSinRepetidos = new ArrayList<>();
+        
+        for(int i = 0; i < copiaSolucion.size(); i++) {
+            Movimiento unMovimiento = copiaSolucion.get(i);            
+            boolean sonIguales = false;
+            for(int j = 0; j < copiaSolucion.size(); j++) {
+                Movimiento otroMovimiento = copiaSolucion.get(j);
+                if(unMovimiento.equals(otroMovimiento) && i != j) {
+                    sonIguales = true;
+                }
+            }
+            
+            if(!sonIguales) {
+                copiaSolucionSinRepetidos.add(unMovimiento);
+            }
+        }
+        
+
+        return copiaSolucionSinRepetidos;
     }
     
     public void agregarTablero(String[][] unTablero) {
@@ -105,7 +125,7 @@ public class Historial {
         }
     }
     
-    public void guardarSolucion(int fila, int columna) { 
+    public void guardarSolucion(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorialSol(m);
     }

@@ -105,15 +105,14 @@ public class Juego {
     public void jugar(int fila, int columna) {
         int posicionFila = fila - 1;
         int posicionColumna = columna - 1;
-        boolean condicion1 = posicionFila >= 0 && posicionFila < this.tablero.getFilas();
-        boolean condicion2 = posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas();
-        boolean condicion3 = fila == -1 && columna == -1;
+        boolean filaValida = posicionFila >= 0 && posicionFila < this.tablero.getFilas();
+        boolean columnaValida = posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas();
+        boolean FilaColumnaRetroceso = fila == -1 && columna == -1;
         
         try {
-            if ((condicion1 && condicion2) || condicion3) {
-                historiales.guardarMovimiento(fila, columna);
-    
-                if(!(fila == -1 && columna == -1)) {
+            if (filaValida && columnaValida || FilaColumnaRetroceso) {
+                
+                if(!FilaColumnaRetroceso) {
                     String[][] tableroPrevio = this.obtenerUltimoTablero();
                     String[][] tableroNuevo = copiarTablero(tableroPrevio);
 
@@ -133,8 +132,8 @@ public class Juego {
                     this.tablero.setTableritoActual(tableroNuevo);
                 }
                 this.tiempoFin = System.currentTimeMillis();
-            } else {
                 historiales.guardarMovimiento(fila, columna);
+            } else {
                 throw new RuntimeException("Movimiento inválido.");
             }
         } catch(RuntimeException e) {
