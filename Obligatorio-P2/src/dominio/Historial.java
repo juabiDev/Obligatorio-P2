@@ -6,8 +6,7 @@ package dominio;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+
 
 /**
  *
@@ -25,7 +24,40 @@ public class Historial {
     }
     
     public void agregarMovimiento(Movimiento movimiento) {
-        movimientos.add(movimiento);
+        boolean existeEnSolucion = false;
+
+        if(movimiento.getColumna() == -1 && movimiento.getFila() == -1) {
+
+            if(this.obtenerMovimientos().size() > 0) {
+                Movimiento ultimoMovimientoHistorial = this.obtenerMovimientos().get(obtenerMovimientos().size() - 1);
+
+                for(int i = 0; i < this.solucion.size(); i++) {
+                    // Verificamos si ese ultimo movimiento es parte de la solución
+                    
+                    if(solucion.get(i).getColumna() == ultimoMovimientoHistorial.getColumna() && solucion.get(i).getFila() == ultimoMovimientoHistorial.getFila()) {
+                        
+                        // puede haber mas de un elemento, pero en caso de retroceder hay que borrar solo uno
+                        
+                        if(!existeEnSolucion) {
+                            existeEnSolucion = true;
+                            this.solucion.remove(i);
+                        }
+                    }
+                }
+            }
+
+            // Si el ultimo elemento del historial no es parte de la solucion, borramos el ultimo elemento de la solucion
+            if(!existeEnSolucion) {
+                solucion.remove(solucion.size() - 1);
+            }
+            
+            movimientos.remove(movimientos.size() - 1);
+
+            
+        } else {
+            solucion.add(movimiento);
+            movimientos.add(movimiento);   
+        }
     }
     
     public ArrayList<Movimiento> obtenerMovimientos() {
@@ -36,10 +68,9 @@ public class Historial {
         solucion.add(movimiento);
     }
     
-    public ArrayList<Movimiento> getSolucion() {
-        // To-Do : falta contemplar los -1 -1 (ojo con este ultimo)
+    public ArrayList<Movimiento> getSolucion() { 
+        
         ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
-        copiaSolucion.addAll(obtenerMovimientos());
         
         ArrayList<Movimiento> copiaSolucionSinRepetidos = new ArrayList<>();
         
@@ -57,7 +88,7 @@ public class Historial {
                 copiaSolucionSinRepetidos.add(unMovimiento);
             }
         }
-        
+       
 
         return copiaSolucionSinRepetidos;
     }
@@ -124,7 +155,7 @@ public class Historial {
             throw new RuntimeException("No se puede retroceder, porque estamos en el tablero inicial.");
         }
     }
-    
+
     public void guardarSolucion(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorialSol(m);
@@ -133,6 +164,5 @@ public class Historial {
     public void guardarHistorialSol(Movimiento m) {
         agregarSolucion(m);
     }
-
     
 }
