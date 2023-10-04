@@ -72,23 +72,29 @@ public class Juego {
     
     public void crearTableroAleatorio(int filas, int columnas, int nivel) {
         
-        Tablero t = tablero.tableroAleatorio(filas, columnas, nivel);
-        
         Random rand = new Random();
+        Tablero t;
+        do {
+
+            t = tablero.tableroAleatorio(filas, columnas, nivel);
+
+            int contadorMovimientos = 0;
+
+            // Aplica movimientos aleatorios para generar el nivel requerido
+            for (int i = 0; contadorMovimientos < nivel; i++) {
+                int fila = rand.nextInt(filas);
+                int columna = rand.nextInt(columnas);
+                boolean realizado = aplicarMovimientoEnCelda(t, fila, columna);
+
+                if (realizado) {
+                    historiales.guardarSolucion(fila + 1, columna + 1);
+                    contadorMovimientos++;
+                }
+            }
+
+
+        } while (t.verificarTablero()); 
         
-        int contadorMovimientos = 0;
-                
-        // Aplica movimientos aleatorios para generar el nivel requerido
-        for (int i = 0; contadorMovimientos < nivel; i++) {
-            int fila = rand.nextInt(filas);
-            int columna = rand.nextInt(columnas);
-            boolean realizado = aplicarMovimientoEnCelda(t, fila, columna);
-            
-            if(realizado) {
-                historiales.guardarSolucion(fila+1, columna+1);
-                contadorMovimientos++;
-            }         
-        }
         this.tablero = t;
     }
 

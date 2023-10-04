@@ -187,7 +187,7 @@ public class Tablero {
         return retorno;
     }
     
-     public static Tablero tableroAleatorio(int filas, int columnas, int nivel) {
+     public Tablero tableroAleatorio(int filas, int columnas, int nivel) {
         Tablero tablero = new Tablero(filas, columnas, nivel);
         Random rand = new Random();
 
