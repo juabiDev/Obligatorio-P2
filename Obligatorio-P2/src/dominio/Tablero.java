@@ -15,7 +15,6 @@ import java.util.Random;
  * @author User
  */
 public class Tablero {
-
     private int filas;
     private int columnas;
     private int nivel;
@@ -51,6 +50,22 @@ public class Tablero {
         this.solucionTablero = solucionTablero;
     }
     
+    public String[][] getTableritoActual() {
+        return this.tableritoActual;
+    }
+    
+    public void setTableritoActual(String[][] untablero) {
+       this.tableritoActual = untablero;
+    }
+    
+    public int getFilas() {
+        return this.filas;
+    }
+    
+    public int getColumnas() {
+        return this.columnas;
+    }
+    
     private boolean validarTablero(int filas, int columnas, int nivel) {
         boolean condFilas = (filas >= 3 && filas <= 9);
         boolean condCols = (columnas >= 3 && columnas <= 9);
@@ -78,71 +93,68 @@ public class Tablero {
         }
         return valido;
     }
-    
-    public void cambiarColor(int fila, int columna) {
+  
+    public boolean verificarTablero() {
+        String[][] tablerito = this.tableritoActual;
+        String color = String.valueOf(tablerito[0][0].charAt(1));
+        boolean retorno = true;
         
-    }
-    
-    public void setTableritoActual(String[][] untablero) {
-       this.tableritoActual = untablero;
-    }
-    
-    public int getFilas() {
-        return this.filas;
-    }
-    
-    public int getColumnas() {
-        return this.columnas;
-    }
-    
-    public String[][] getTableritoActual() {
-        return this.tableritoActual;
-    }
-    
-   public Tablero tableroDesdeArchivo() throws FileNotFoundException {
-            // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2.1\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
-
-            // Leer las dimensiones del tablero (m filas x n columnas)
-            int m = input.nextInt();
-            int n = input.nextInt();
-            input.nextLine(); // Leer el salto de línea después de las dimensiones
-
-            // Crear el tablero con las dimensiones especificadas
-            String[][] tablero = new String[m][n];
-            // Leer el contenido del tablero y asignar colores
-            for (int fila = 0; fila < m; fila++) {
-                String filaTablero = input.nextLine();
-                String[] simbolos = filaTablero.split(" "); // Divide la fila en símbolos
-                
-                for (int columna = 0; columna < n; columna++) {
-                    String simbolo = simbolos[columna]; 
-                    // Agregar el símbolo al tablero con el color correspondiente
-                    tablero[fila][columna] = simbolo; // Resetear color
+        for (String[] tablerito1 : tablerito) {
+            for (int j = 0; j < tablerito[0].length; j++) {
+                String celda = tablerito1[j];
+                String colorActual = String.valueOf(celda.charAt(1));
+                if(!colorActual.equals(color)) {
+                    retorno = false;
                 }
             }
-            int nivel = input.nextInt();
-            
-            ArrayList<Movimiento> aux = new ArrayList<>();
-            
-            for(int i = 0; i < nivel; i++) {
-                int fila = input.nextInt();
-                int columna = input.nextInt();
-                Movimiento movimiento = new Movimiento(fila,columna);
-                aux.add(movimiento);
-            }
-            
-            // Cerrar el archivo
-            input.close();
-            
-            Tablero t = new Tablero(m, n, nivel);
-            t.setSolucionTablero(aux);
-            t.setTableritoActual(tablero);
-            
-            return t;
+        }
+        return retorno;
     }
     
-    public static Tablero tableroPredefinido() {                
+    public Tablero tableroDesdeArchivo() throws FileNotFoundException {
+        // Abrir el archivo "datos.txt" para lectura
+        Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2.1\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+
+        // Leer las dimensiones del tablero (m filas x n columnas)
+        int m = input.nextInt();
+        int n = input.nextInt();
+        input.nextLine(); // Leer el salto de línea después de las dimensiones
+
+        // Crear el tablero con las dimensiones especificadas
+        String[][] tablero = new String[m][n];
+        // Leer el contenido del tablero y asignar colores
+        for (int fila = 0; fila < m; fila++) {
+            String filaTablero = input.nextLine();
+            String[] simbolos = filaTablero.split(" "); // Divide la fila en símbolos
+
+            for (int columna = 0; columna < n; columna++) {
+                String simbolo = simbolos[columna]; 
+                // Agregar el símbolo al tablero con el color correspondiente
+                tablero[fila][columna] = simbolo; // Resetear color
+            }
+        }
+        int dificultad = input.nextInt();
+
+        ArrayList<Movimiento> aux = new ArrayList<>();
+
+        for(int i = 0; i < dificultad; i++) {
+            int fila = input.nextInt();
+            int columna = input.nextInt();
+            Movimiento movimiento = new Movimiento(fila,columna);
+            aux.add(movimiento);
+        }
+
+        // Cerrar el archivo
+        input.close();
+
+        Tablero t = new Tablero(m, n, dificultad);
+        t.setSolucionTablero(aux);
+        t.setTableritoActual(tablero);
+
+        return t;
+    }
+    
+    public Tablero tableroPredefinido() {                
         String[][] tablero = {
             {"|A", "|A", "-R", "/A", "|R", "-R"},
             {"-R", "/A", "/A", "|A", "-R", "-R"},
@@ -152,7 +164,7 @@ public class Tablero {
         };
         
         Tablero t = new Tablero(5, 6, 3);
-        ArrayList<Movimiento> solucionTablero = new ArrayList<>();
+        //ArrayList<Movimiento> solucionTablero = new ArrayList<>();
         
         Movimiento m1 = new Movimiento(4,4);
         Movimiento m2 = new Movimiento(5,6);
@@ -168,26 +180,7 @@ public class Tablero {
         return t;
     }
     
-    public boolean verificarTablero() {
-        String[][] tabla = this.tableritoActual;
-        String color = String.valueOf(tabla[0][0].charAt(1));
-        boolean retorno = true;
-        
-        for(int i = 0; i < tabla.length; i++) {
-            for(int j = 0; j < tabla[0].length; j++) {
-                String celda = tabla[i][j];
-                String colorActual = String.valueOf(celda.charAt(1));
-             
-                if(!colorActual.equals(color)) {
-                    retorno = false;
-                }
-            }
-        }
-        
-        return retorno;
-    }
-    
-     public Tablero tableroAleatorio(int filas, int columnas, int nivel) {
+    public Tablero tableroAleatorio(int filas, int columnas, int nivel) {
         Tablero tablero = new Tablero(filas, columnas, nivel);
         Random rand = new Random();
 
@@ -206,8 +199,6 @@ public class Tablero {
         }
         tablero.setTableritoActual(tableroActual);
 
-
         return tablero;
     }
-     
 }

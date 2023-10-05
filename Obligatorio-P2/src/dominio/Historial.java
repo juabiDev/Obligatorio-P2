@@ -25,19 +25,14 @@ public class Historial {
     
     public void agregarMovimiento(Movimiento movimiento) {
         boolean existeEnSolucion = false;
-
+        
         if(movimiento.getColumna() == -1 && movimiento.getFila() == -1) {
-
-            if(this.obtenerMovimientos().size() > 0) {
+            if(!this.obtenerMovimientos().isEmpty()) {
                 Movimiento ultimoMovimientoHistorial = this.obtenerMovimientos().get(obtenerMovimientos().size() - 1);
-
                 for(int i = 0; i < this.solucion.size(); i++) {
                     // Verificamos si ese ultimo movimiento es parte de la solución
-                    
-                    if(solucion.get(i).getColumna() == ultimoMovimientoHistorial.getColumna() && solucion.get(i).getFila() == ultimoMovimientoHistorial.getFila()) {
-                        
-                        // puede haber mas de un elemento, pero en caso de retroceder hay que borrar solo uno
-                        
+                    if(solucion.get(i).getColumna() == ultimoMovimientoHistorial.getColumna() && solucion.get(i).getFila() == ultimoMovimientoHistorial.getFila()) {                
+                        // puede haber mas de un elemento, pero en caso de retroceder hay que borrar solo uno                    
                         if(!existeEnSolucion) {
                             existeEnSolucion = true;
                             this.solucion.remove(i);
@@ -45,15 +40,11 @@ public class Historial {
                     }
                 }
             }
-
             // Si el ultimo elemento del historial no es parte de la solucion, borramos el ultimo elemento de la solucion
             if(!existeEnSolucion) {
                 solucion.remove(solucion.size() - 1);
             }
-            
-            movimientos.remove(movimientos.size() - 1);
-
-            
+            movimientos.remove(movimientos.size() - 1);            
         } else {
             solucion.add(movimiento);
             movimientos.add(movimiento);   
@@ -68,10 +59,8 @@ public class Historial {
         solucion.add(movimiento);
     }
     
-    public ArrayList<Movimiento> getSolucion() { 
-        
-        ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
-        
+    public ArrayList<Movimiento> getSolucion() {     
+        ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);    
         ArrayList<Movimiento> copiaSolucionSinRepetidos = new ArrayList<>();
         
         for(int i = 0; i < copiaSolucion.size(); i++) {
@@ -83,53 +72,42 @@ public class Historial {
                     sonIguales = true;
                 }
             }
-            
             if(!sonIguales) {
                 copiaSolucionSinRepetidos.add(unMovimiento);
             }
         }
-       
-
         return copiaSolucionSinRepetidos;
     }
     
     public void agregarTablero(String[][] unTablero) {
         // Copiar el tablero y agregar la copia al historial
-        String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];
-        
-        
+        String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];   
         for (int i = 0; i < unTablero.length; i++) {
             copiaTablero[i] = Arrays.copyOf(unTablero[i], unTablero[i].length);
-        }
-        
+        }   
         tableros.add(copiaTablero);
     }
     
     public String[][] obtenerUltimoTablero() {
-        String[][] ultimo = null;
-        
+        String[][] ultimo = null;     
         for(int i = 0; i < tableros.size(); i++) {
             if(i == tableros.size() - 1) {
                 ultimo = tableros.get(i);
             }
         }
-
         return ultimo;
     }
     
     public String[][][] obtenerUltimosDosTableros() {
         String[][][] ultimas = new String[2][][];
-        
         for(int i = 0; i < tableros.size(); i++) {
             if(i == tableros.size() - 2) {
                 ultimas[0] = tableros.get(i);
-            }
-                        
+            }           
             if(i == tableros.size() - 1) {
                 ultimas[1] = tableros.get(i);
             }
-        }
-                
+        }           
         return ultimas;
     }
     
@@ -164,5 +142,4 @@ public class Historial {
     public void guardarHistorialSol(Movimiento m) {
         agregarSolucion(m);
     }
-    
 }
