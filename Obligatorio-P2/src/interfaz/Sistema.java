@@ -9,7 +9,9 @@ import java.io.FileNotFoundException;
 import dominio.*;
 /**
  *
- * @author User
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  * 
  */
 public class Sistema {
@@ -17,8 +19,10 @@ public class Sistema {
         Scanner scanner = new Scanner(System.in);
         ConsolaSoliflips consola = new ConsolaSoliflips();
         Juego juego;
-        
-        while (true) {
+        System.out.println("Desea comenzar a jugar? S/N ");
+        String comenzarPartida = scanner.nextLine();
+            
+        while (comenzarPartida.equalsIgnoreCase("S")) {
             consola.mostrarMenuPrincipal(); 
             try {
                 String opcion = scanner.nextLine().toLowerCase();
@@ -73,7 +77,7 @@ public class Sistema {
                     int columna = posicion[1];
                     
                     try {
-                        juego.jugar(fila, columna);
+                        juegoTerminado = juego.jugar(fila, columna);
                         if(fila == -1 && columna == -1) {
                             String[][] tablero = juego.obtenerUltimoTablero();
                             consola.imprimirTablero(tablero);
@@ -86,7 +90,6 @@ public class Sistema {
                         System.out.println();
                     }         
                     
-                    juegoTerminado = juego.juegoTerminado();
                     break;
                 case "x":
                     System.out.println("Adios. ¡Gracias por jugar!");

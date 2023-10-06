@@ -10,7 +10,9 @@ import java.util.Arrays;
 
 /**
  *
- * @author User
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  */
 public class Historial {
     private ArrayList<Movimiento> solucion;

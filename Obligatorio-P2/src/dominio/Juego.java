@@ -10,7 +10,9 @@ import java.util.Random;
 
 /**
  *
- * @author User
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  */
 public class Juego {
     private Tablero tablero;
@@ -18,6 +20,7 @@ public class Juego {
     private long tiempoInicio;
     private long tiempoFin;
 
+    
     public Juego() {
         this.tablero = new Tablero();
         this.historiales = new Historial();
@@ -39,8 +42,16 @@ public class Juego {
         tiempoInicio = System.currentTimeMillis();
     }
     
-    public long obtenerTiempoTotal() {
-        return tiempoFin - tiempoInicio;
+    public String obtenerTiempoTotal() {
+        long tiempoTotalSegundos = (tiempoFin - tiempoInicio) / 1000;
+
+        long horas = tiempoTotalSegundos / 3600;
+        long minutos = (tiempoTotalSegundos % 3600) / 60;
+        long segundos = tiempoTotalSegundos % 60;
+
+        String tiempoTotalFormato = String.format("%02d:%02d:%02d", horas, minutos, segundos);
+
+        return tiempoTotalFormato;
     }
     
     /* --- Historiales desde Sistema --- */
@@ -108,12 +119,13 @@ public class Juego {
     
     /* --- Jugabilidad --- */
     
-    public void jugar(int fila, int columna) {
+    public boolean jugar(int fila, int columna) {
         int posicionFila = fila - 1;
         int posicionColumna = columna - 1;
-        boolean filaValida = posicionFila >= 0 && posicionFila < this.tablero.getFilas();
-        boolean columnaValida = posicionColumna >= 0 && posicionColumna < this.tablero.getColumnas();
+        boolean filaValida = posicionFila >= 0 && posicionFila < this.tablero.getTableritoActual().length;
+        boolean columnaValida = posicionColumna >= 0 && posicionColumna < this.tablero.getTableritoActual()[0].length;
         boolean FilaColumnaRetroceso = fila == -1 && columna == -1;
+        boolean tableroCompletado = this.tablero.verificarTablero();
         
         try {
             if (filaValida && columnaValida || FilaColumnaRetroceso) {
@@ -137,24 +149,19 @@ public class Juego {
 
                     this.tablero.setTableritoActual(tableroNuevo);
                 }
-                this.tiempoFin = System.currentTimeMillis();
+                
                 historiales.guardarMovimiento(fila, columna);
+                tableroCompletado = this.tablero.verificarTablero();
+                this.tiempoFin = System.currentTimeMillis();
             } else {
                 throw new RuntimeException("Movimiento inválido.");
             }
+            
         } catch(RuntimeException e) {
             throw new RuntimeException(e.getMessage());
         }
-    }
-    
-    public boolean juegoTerminado() {
-        boolean retorno = this.tablero.verificarTablero();
         
-        if(retorno) {      
-            this.tiempoFin = System.currentTimeMillis();
-        }
-
-        return retorno;
+        return tableroCompletado;
     }
     
     public void aplicarMovimiento(String celda, int fila, int columna, String[][] tableroNuevo) {

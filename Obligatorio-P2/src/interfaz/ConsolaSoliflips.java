@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 /**
  *
- * @author Dell_
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  */
 public class ConsolaSoliflips {
     public void mostrarMenuPrincipal() {

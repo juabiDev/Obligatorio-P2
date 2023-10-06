@@ -6,7 +6,9 @@ package dominio;
 
 /**
  *
- * @author User
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  */
 public class Movimiento {
     private int fila;

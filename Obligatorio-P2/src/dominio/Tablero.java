@@ -12,21 +12,19 @@ import java.util.Random;
 
 /**
  *
- * @author User
+ * @author 
+ * Dana Cizin 239510
+ * Fabian Mederos 281938
  */
 public class Tablero {
 
-    private int filas;
-    private int columnas;
     private int nivel;
     private String [][] tableritoActual;
     private ArrayList<Movimiento> solucionTablero;
     
-    public Tablero() { // el tablero tiene como minimo 3 filas y 3 columnas
-        this.filas = 3;
-        this.columnas = 3;
+    public Tablero() {
         this.nivel = 1;
-        this.tableritoActual = new String[this.filas][this.columnas];
+        this.tableritoActual = new String[1][1];
         this.solucionTablero = new ArrayList<>();
     }
     
@@ -34,9 +32,7 @@ public class Tablero {
         try {
             boolean valido = validarTablero(filas, columnas, nivel);
             if (valido) {
-                this.filas = filas;
-                this.columnas = columnas;
-                this.tableritoActual = new String[this.filas][this.columnas];
+                this.tableritoActual = new String[filas][columnas];
             }
         } catch (RuntimeException e) {
              throw new RuntimeException(e.getMessage());
@@ -79,21 +75,12 @@ public class Tablero {
         return valido;
     }
     
-    public void cambiarColor(int fila, int columna) {
-        
-    }
-    
+
     public void setTableritoActual(String[][] untablero) {
        this.tableritoActual = untablero;
     }
     
-    public int getFilas() {
-        return this.filas;
-    }
-    
-    public int getColumnas() {
-        return this.columnas;
-    }
+
     
     public String[][] getTableritoActual() {
         return this.tableritoActual;
