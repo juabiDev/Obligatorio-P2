@@ -55,20 +55,10 @@ public class Juego {
     }
     
     /* --- Historiales desde Sistema --- */
-    public void guardarTablero(String[][] unTablero) {
-        this.historiales.agregarTablero(unTablero);
-    }
+
     
     public ArrayList obtenerHistorialMovimientos() {
         return historiales.obtenerMovimientos();
-    }
-    
-    public String[][] obtenerUltimoTablero() {
-        return historiales.obtenerUltimoTablero();
-    }
-    
-    public String[][][] obtenerUltimosDosTableros() {
-        return historiales.obtenerUltimosDosTableros();
     }
     
     /* --- Creación de Tableros --- */
@@ -131,23 +121,34 @@ public class Juego {
             if (filaValida && columnaValida || FilaColumnaRetroceso) {
                 
                 if(!FilaColumnaRetroceso) {
-                    String[][] tableroPrevio = this.obtenerUltimoTablero();
+                    String[][] tableroPrevio = tablero.getTableritoActual();
                     String[][] tableroNuevo = copiarTablero(tableroPrevio);
 
                     String celda = tableroNuevo[posicionFila][posicionColumna];
 
                     aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
 
-                    this.historiales.agregarTablero(tableroNuevo);
                     this.tablero.setTableritoActual(tableroNuevo);
 
                 } else {          
-                    historiales.borrarUltimoTablero();
-
-                    String[][] tableroPrevio = this.obtenerUltimoTablero();
+                    String[][] tableroPrevio = tablero.getTableritoActual();
                     String[][] tableroNuevo = copiarTablero(tableroPrevio);
+                    if(historiales.obtenerMovimientos().size() > 0) {
+                        Movimiento ultimoMovimiento = historiales.obtenerMovimientos().get(historiales.obtenerMovimientos().size() - 1);
+                        String celda = tableroNuevo[ultimoMovimiento.getFila() - 1][ultimoMovimiento.getColumna() - 1];
 
-                    this.tablero.setTableritoActual(tableroNuevo);
+                        System.out.println("fila:"+ultimoMovimiento.getFila());
+                        System.out.println("columna:"+ultimoMovimiento.getColumna());
+
+                        aplicarMovimiento(celda, ultimoMovimiento.getFila(), ultimoMovimiento.getColumna(), tableroNuevo);
+
+                        this.tablero.setTableritoActual(tableroNuevo);
+                    } else {
+                        
+                        throw new RuntimeException("No se puede aplicar paso de retroceso. Tablero sin modificaciones:");
+                        
+                    }
+
                 }
                 
                 historiales.guardarMovimiento(fila, columna);

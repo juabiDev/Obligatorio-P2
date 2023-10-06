@@ -31,14 +31,12 @@ public class Sistema {
                     case "a":
                        juego = new Juego();
                        juego.crearTableroDeArchivo();
-                       juego.guardarTablero(juego.obtenerTableroActual());
                        consola.imprimirTablero(juego.obtenerTableroActual());
                        jugarPartida(juego, consola, scanner);
                        break;
                     case "b":
                        juego = new Juego();
                        juego.crearTableroPredefinido();
-                       juego.guardarTablero(juego.obtenerTableroActual());
                        consola.imprimirTablero(juego.obtenerTableroActual());
                        jugarPartida(juego, consola, scanner);
                        break;
@@ -49,7 +47,6 @@ public class Sistema {
                        int columnas = dimensiones[1];
                        int nivel = dimensiones[2];
                        juego.crearTableroAleatorio(filas, columnas, nivel);
-                       juego.guardarTablero(juego.obtenerTableroActual());
                        consola.imprimirTablero(juego.obtenerTableroActual());
                        jugarPartida(juego, consola, scanner);
                        break;
@@ -77,15 +74,29 @@ public class Sistema {
                     int columna = posicion[1];
                     
                     try {
+                        
+                        String[][] tableroAnterior = juego.obtenerTableroActual();
+                        
                         juegoTerminado = juego.jugar(fila, columna);
+                        
+                        String[][] tableroPosterior = juego.obtenerTableroActual();
+                                
                         if(fila == -1 && columna == -1) {
-                            String[][] tablero = juego.obtenerUltimoTablero();
-                            consola.imprimirTablero(tablero);
+                            consola.imprimirTablero(tableroPosterior);
                         } else {
-                            String[][][] tableros = juego.obtenerUltimosDosTableros();
-                            consola.imprimirTablerosLadoALado(tableros[0], tableros[1]);
+                            consola.imprimirTablerosLadoALado(tableroAnterior, tableroPosterior);
                         }
+                        
                     } catch(RuntimeException e) {
+                        String[][] tableroPosterior = juego.obtenerTableroActual();
+                            System.out.println("fila:"+fila);
+                             System.out.println("columna:"+columna);
+                            System.out.println("historiales:"+historiales.obtenerMovimientos().size());
+
+                        if(fila == -1 && columna == -1 && historiales.obtenerMovimientos().size() == 0) {
+                            consola.imprimirTablero(tableroPosterior);
+                        }
+                        
                         System.err.println("Error: "+e.getMessage());
                         System.out.println();
                     }         

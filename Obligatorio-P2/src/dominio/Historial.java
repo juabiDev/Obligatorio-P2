@@ -54,7 +54,6 @@ public class Historial {
             }
             
             movimientos.remove(movimientos.size() - 1);
-
             
         } else {
             solucion.add(movimiento);
@@ -95,45 +94,6 @@ public class Historial {
         return copiaSolucionSinRepetidos;
     }
     
-    public void agregarTablero(String[][] unTablero) {
-        // Copiar el tablero y agregar la copia al historial
-        String[][] copiaTablero = new String[unTablero.length][unTablero[0].length];
-        
-        
-        for (int i = 0; i < unTablero.length; i++) {
-            copiaTablero[i] = Arrays.copyOf(unTablero[i], unTablero[i].length);
-        }
-        
-        tableros.add(copiaTablero);
-    }
-    
-    public String[][] obtenerUltimoTablero() {
-        String[][] ultimo = null;
-        
-        for(int i = 0; i < tableros.size(); i++) {
-            if(i == tableros.size() - 1) {
-                ultimo = tableros.get(i);
-            }
-        }
-
-        return ultimo;
-    }
-    
-    public String[][][] obtenerUltimosDosTableros() {
-        String[][][] ultimas = new String[2][][];
-        
-        for(int i = 0; i < tableros.size(); i++) {
-            if(i == tableros.size() - 2) {
-                ultimas[0] = tableros.get(i);
-            }
-                        
-            if(i == tableros.size() - 1) {
-                ultimas[1] = tableros.get(i);
-            }
-        }
-                
-        return ultimas;
-    }
     
     public ArrayList obtenerTableros() {
         return tableros;
@@ -148,15 +108,6 @@ public class Historial {
        agregarMovimiento(m);
     }
     
-    public void borrarUltimoTablero() {
-        int cantidadDeTableros = this.obtenerTableros().size();
-        
-        if (cantidadDeTableros > 1) {
-            tableros.remove(tableros.size() - 1);
-        } else {
-            throw new RuntimeException("No se puede retroceder, porque estamos en el tablero inicial.");
-        }
-    }
 
     public void guardarSolucion(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
