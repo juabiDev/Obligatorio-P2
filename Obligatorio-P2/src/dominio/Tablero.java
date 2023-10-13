@@ -17,12 +17,10 @@ import java.util.Random;
  * Fabian Mederos 281938
  */
 public class Tablero {
-    private int nivel;
     private String [][] tableritoActual;
     private ArrayList<Movimiento> solucionTablero;
     
     public Tablero() {
-        this.nivel = 1;
         this.tableritoActual = new String[1][1];
         this.solucionTablero = new ArrayList<>();
     }

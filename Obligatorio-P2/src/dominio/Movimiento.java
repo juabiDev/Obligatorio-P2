@@ -19,17 +19,17 @@ public class Movimiento {
         this.columna = 0;
     }
     
+    public Movimiento(int fila, int columna) {
+        this.fila = fila;
+        this.columna = columna;
+    }
+    
     public int getFila() {
         return this.fila;
     }
     
     public int getColumna() {
         return this.columna;
-    }
-     
-    public Movimiento(int fila, int columna) {
-        this.fila = fila;
-        this.columna = columna;
     }
     
     @Override

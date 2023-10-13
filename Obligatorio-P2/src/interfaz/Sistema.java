@@ -19,10 +19,14 @@ public class Sistema {
         Scanner scanner = new Scanner(System.in);
         ConsolaSoliflips consola = new ConsolaSoliflips();
         Juego juego;
-        System.out.println("Desea comenzar a jugar? S/N ");
-        String comenzarPartida = scanner.nextLine();
+        String opcionUsuario;
+        
+        do {
+            System.out.println("Desea comenzar a jugar? S/N ");
+            opcionUsuario = scanner.nextLine();
+        } while(!opcionUsuario.equalsIgnoreCase("S") && !opcionUsuario.equalsIgnoreCase("N")); 
             
-        while (comenzarPartida.equalsIgnoreCase("S")) {
+        while (opcionUsuario.equalsIgnoreCase("S")) {
             consola.mostrarMenuPrincipal(); 
             try {
                 String opcion = scanner.nextLine().toLowerCase();
@@ -51,7 +55,7 @@ public class Sistema {
                        jugarPartida(juego, consola, scanner);
                        break;
                     default:
-                       System.err.println("Opción no válida. Por favor, seleccione una opción válida.");
+                       System.err.println("Por favor, ingrese una opción válida.");
                        break;
                 }   
             } catch(RuntimeException e) {
@@ -63,6 +67,7 @@ public class Sistema {
     public static void jugarPartida(Juego juego, ConsolaSoliflips consola, Scanner scanner) {
         Historial historiales = juego.getHistoriales();
         boolean juegoTerminado = false;
+        String mensajeFinal = "";
         while (!juegoTerminado) {
             consola.mostrarSubMenu();
             String opcion = scanner.nextLine();
@@ -74,24 +79,22 @@ public class Sistema {
                     int columna = posicion[1];
                     
                     try {
-                        
                         String[][] tableroAnterior = juego.obtenerTableroActual();
-                        
+                                                
                         juegoTerminado = juego.jugar(fila, columna);
+                        if(juegoTerminado) {
+                            mensajeFinal = "FELICIDADES HAS GANADO!\n" + "Tiempo de partida: " + juego.obtenerTiempoTotal();
+                        }
                         
                         String[][] tableroPosterior = juego.obtenerTableroActual();
-                                
+
                         if(fila == -1 && columna == -1) {
                             consola.imprimirTablero(tableroPosterior);
                         } else {
                             consola.imprimirTablerosLadoALado(tableroAnterior, tableroPosterior);
                         }
-                        
                     } catch(RuntimeException e) {
                         String[][] tableroPosterior = juego.obtenerTableroActual();
-                            System.out.println("fila:"+fila);
-                             System.out.println("columna:"+columna);
-                            System.out.println("historiales:"+historiales.obtenerMovimientos().size());
 
                         if(fila == -1 && columna == -1 && historiales.obtenerMovimientos().isEmpty()) {
                             consola.imprimirTablero(tableroPosterior);
@@ -100,39 +103,42 @@ public class Sistema {
                         System.err.println("Error: "+e.getMessage());
                         System.out.println();
                     }         
-                    
                     break;
                 case "x":
-                    System.out.println("Adios. ¡Gracias por jugar!");
+                    System.out.println("Adiós. ¡Gracias por jugar!");
                     juegoTerminado = true;
+                    mensajeFinal = "Tiempo de partida: " + juego.obtenerTiempoTotal();
                     break;
                 case "h":
                     if(!juego.obtenerHistorialMovimientos().isEmpty()) {
-                        consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
+                        consola.imprimirMovimientos(juego.obtenerHistorialMovimientos());
                         System.out.println();
                     } else {
-                        System.out.println("No se ha realizado ningun movimiento valido");
+                        System.out.println("No se ha realizado ningún movimiento válido");
                         System.out.println();
                     }
                     break;
                 case "s":
-                    System.out.println(historiales.getSolucion());
+                    consola.imprimirMovimientos(historiales.getSolucion());
                     System.out.println();
                     break;
                 default:
-                    System.err.println("Opción no válida. Por favor, seleccione una opción válida.");
+                    System.err.println("Por favor, ingrese una opción válida.");
                     break;
             }
         }
 
         if (juegoTerminado) {
-            System.out.println("Tiempo de partida: " + juego.obtenerTiempoTotal());
-            System.out.println("Desea comenzar una nueva partida? S/N ");
-            String opcion = scanner.nextLine();
+            System.out.println(mensajeFinal);
+            String opcionUsuario;
+            do {
+                System.out.println("Desea comenzar una nueva partida? S/N");
+                opcionUsuario = scanner.nextLine();
+            } while(!opcionUsuario.equalsIgnoreCase("S") && !opcionUsuario.equalsIgnoreCase("N")); 
 
-            if (!opcion.equalsIgnoreCase("S")) {
-                System.out.println("Adios. ¡Gracias por jugar!");
-                System.exit(0); // Salir del programa
+            if (!opcionUsuario.equalsIgnoreCase("S")) {
+                System.out.println("Adiós. ¡Gracias por jugar!");
+                System.exit(0);
             }
         }
     }
@@ -161,15 +167,15 @@ public class Sistema {
                 }
             } catch (NumberFormatException e) {
                 i = i-1;               
-                // Simplemente validaciones para ayudar al usuario, al estar en el catch no intentan reemplazar las validaciones del dominio
+                // Validaciones para ayudar al usuario
                 if(mensajeCriterioValidacion.equals("postJuego")) {
                     if(i == -1) {
-                        System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+filaTablero);
+                        System.err.println("Entrada no válida. Ingrese un número entero entre 1 y "+filaTablero);
                     } else {
-                        System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+columnaTablero);
+                        System.err.println("Entrada no válida. Ingrese un número entero entre 1 y "+columnaTablero);
                     }
                 } else {
-                    System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y 8");
+                    System.err.println("Entrada no válida. Ingrese un número entero entre 1 y 8");
                 }
             }
         }

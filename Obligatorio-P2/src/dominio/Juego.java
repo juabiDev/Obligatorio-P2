@@ -88,7 +88,7 @@ public class Juego {
                     contadorMovimientos++;
                 }
             }
-        } while (t.verificarTablero());       
+        } while (t.verificarTablero()); // evitar que el tablero sea todo de un color       
         this.tablero = t;
     }
 
@@ -127,14 +127,11 @@ public class Juego {
                         Movimiento ultimoMovimiento = historiales.obtenerMovimientos().get(historiales.obtenerMovimientos().size() - 1);
                         String celda = tableroNuevo[ultimoMovimiento.getFila() - 1][ultimoMovimiento.getColumna() - 1];
 
-                        System.out.println("fila:"+ultimoMovimiento.getFila());
-                        System.out.println("columna:"+ultimoMovimiento.getColumna());
-
-                        aplicarMovimiento(celda, ultimoMovimiento.getFila(), ultimoMovimiento.getColumna(), tableroNuevo);
+                        aplicarMovimiento(celda, ultimoMovimiento.getFila() - 1, ultimoMovimiento.getFila() - 1, tableroNuevo);
 
                         this.tablero.setTableritoActual(tableroNuevo);
                     } else {              
-                        throw new RuntimeException("No se puede aplicar paso de retroceso. Tablero sin modificaciones:");                      
+                        throw new RuntimeException("Este es el tablero inicial, no se puede aplicar paso de retroceso.");                      
                     }
                 }
                 
@@ -207,7 +204,6 @@ public class Juego {
         String[][] retorno = new String[unTablero.length][unTablero[0].length];
         
         for (int i = 0; i < unTablero.length; i++) {
-           // ME SUGIERE: System.arraycopy(unTablero[i], 0, retorno[i], 0, unTablero[0].length);
             for (int j = 0; j < unTablero[0].length; j++) {
                 retorno[i][j] = unTablero[i][j];
             }

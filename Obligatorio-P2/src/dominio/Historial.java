@@ -15,12 +15,10 @@ import java.util.ArrayList;
 public class Historial {
     private ArrayList<Movimiento> solucion;
     private ArrayList<Movimiento> movimientos;
-    private ArrayList<String[][]> tableros;
     
     public Historial() {
         this.solucion = new ArrayList<>();
         this.movimientos = new ArrayList<>();
-        this.tableros = new ArrayList<>();
     }
     
     public void agregarMovimiento(Movimiento movimiento) {
@@ -87,14 +85,7 @@ public class Historial {
                 copiaSolucionSinRepetidos.add(unMovimiento);
             }
         }
-       
-
         return copiaSolucionSinRepetidos;
-    }
-    
-    
-    public ArrayList obtenerTableros() {
-        return tableros;
     }
     
     public void guardarMovimiento(int fila, int columna) {
@@ -102,18 +93,16 @@ public class Historial {
         guardarHistorialMov(m);
     }
     
-    public void guardarHistorialMov(Movimiento m) {
+    private void guardarHistorialMov(Movimiento m) {
        agregarMovimiento(m);
     }
     
-
     public void guardarSolucion(int fila, int columna) {
         Movimiento m = new Movimiento(fila,columna);
         guardarHistorialSol(m);
     }
     
-    public void guardarHistorialSol(Movimiento m) {
+    private void guardarHistorialSol(Movimiento m) {
         agregarSolucion(m);
     }
-    
 }
