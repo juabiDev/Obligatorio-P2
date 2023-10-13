@@ -5,8 +5,6 @@
 package dominio;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-
 
 /**
  *
@@ -30,7 +28,7 @@ public class Historial {
 
         if(movimiento.getColumna() == -1 && movimiento.getFila() == -1) {
 
-            if(this.obtenerMovimientos().size() > 0) {
+            if(!this.obtenerMovimientos().isEmpty()) {
                 Movimiento ultimoMovimientoHistorial = this.obtenerMovimientos().get(obtenerMovimientos().size() - 1);
 
                 for(int i = 0; i < this.solucion.size(); i++) {

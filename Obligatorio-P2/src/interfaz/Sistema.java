@@ -93,7 +93,7 @@ public class Sistema {
                              System.out.println("columna:"+columna);
                             System.out.println("historiales:"+historiales.obtenerMovimientos().size());
 
-                        if(fila == -1 && columna == -1 && historiales.obtenerMovimientos().size() == 0) {
+                        if(fila == -1 && columna == -1 && historiales.obtenerMovimientos().isEmpty()) {
                             consola.imprimirTablero(tableroPosterior);
                         }
                         
@@ -107,7 +107,7 @@ public class Sistema {
                     juegoTerminado = true;
                     break;
                 case "h":
-                    if(juego.obtenerHistorialMovimientos().size() > 0) {
+                    if(!juego.obtenerHistorialMovimientos().isEmpty()) {
                         consola.imprimirHistorial(juego.obtenerHistorialMovimientos());
                         System.out.println();
                     } else {
@@ -139,43 +139,40 @@ public class Sistema {
 
     public static int[] obtenerEntradas(Juego juego, Scanner scanner, String... mensajes) {
         int[] entradas = new int[mensajes.length - 1];
-        String mensajeCriterioValidacion = mensajes[mensajes.length - 1].toString();
+        String mensajeCriterioValidacion = mensajes[mensajes.length - 1];
         int filaTablero = juego.obtenerTableroActual().length;
         int columnaTablero = juego.obtenerTableroActual()[0].length;
+        boolean mientras = true;
+        
+        for (int i = 0; i < mensajes.length - 1 && mientras; i++) {
+            System.out.println(mensajes[i]);
+            String entradaStr = scanner.nextLine();
 
-        System.out.println("mensajes:"+mensajes[mensajes.length - 1].toString());
-            boolean mientras = true;
-            for (int i = 0; i < mensajes.length - 1 && mientras; i++) {
-                System.out.println(mensajes[i]);
-                String entradaStr = scanner.nextLine();
-                
-                try {
-                    int entrada = Integer.parseInt(entradaStr);
-                    
-                    if (!Character.isDigit(entradaStr.charAt(0)) && !(mensajeCriterioValidacion.equals("postJuego") && entrada == -1)) {
-                        throw new NumberFormatException();
-                    }
-                    
-                    entradas[i] = entrada;
-                    
-                    if(i == mensajes.length - 1) {
-                        mientras = false; 
-                    }
-                } catch (NumberFormatException e) {
-                    i = i-1;
-                  
-                    // Simplemente validaciones para ayudar al usuario, al estar en el catch no intentan reemplazar las validaciones del dominio
-                    if(mensajeCriterioValidacion.equals("postJuego")) {
-                        if(i == -1) {
-                            System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+filaTablero);
-                        } else {
-                            System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+columnaTablero);
-                        }
+            try {
+                int entrada = Integer.parseInt(entradaStr);                
+                if (!Character.isDigit(entradaStr.charAt(0)) && !(mensajeCriterioValidacion.equals("postJuego") && entrada == -1)) {
+                    throw new NumberFormatException();
+                }
+
+                entradas[i] = entrada;
+
+                if(i == mensajes.length - 1) {
+                    mientras = false; 
+                }
+            } catch (NumberFormatException e) {
+                i = i-1;               
+                // Simplemente validaciones para ayudar al usuario, al estar en el catch no intentan reemplazar las validaciones del dominio
+                if(mensajeCriterioValidacion.equals("postJuego")) {
+                    if(i == -1) {
+                        System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+filaTablero);
                     } else {
-                        System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y 8");
+                        System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y "+columnaTablero);
                     }
+                } else {
+                    System.err.println("Entrada no válida. Ingrese un número entero válido entre 1 y 8");
                 }
             }
+        }
         return entradas;
     }
 }

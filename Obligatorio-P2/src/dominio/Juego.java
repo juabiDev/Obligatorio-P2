@@ -20,7 +20,6 @@ public class Juego {
     private long tiempoInicio;
     private long tiempoFin;
 
-    
     public Juego() {
         this.tablero = new Tablero();
         this.historiales = new Historial();
@@ -56,7 +55,6 @@ public class Juego {
     
     /* --- Historiales desde Sistema --- */
 
-    
     public ArrayList obtenerHistorialMovimientos() {
         return historiales.obtenerMovimientos();
     }
@@ -71,12 +69,10 @@ public class Juego {
        });
     }
     
-    public void crearTableroAleatorio(int filas, int columnas, int nivel) {
-        
+    public void crearTableroAleatorio(int filas, int columnas, int nivel) {   
         Random rand = new Random();
         Tablero t;
         do {
-
             t = tablero.tableroAleatorio(filas, columnas, nivel);
 
             int contadorMovimientos = 0;
@@ -92,16 +88,12 @@ public class Juego {
                     contadorMovimientos++;
                 }
             }
-
-
-        } while (t.verificarTablero()); 
-        
+        } while (t.verificarTablero());       
         this.tablero = t;
     }
 
     public void crearTableroPredefinido() {
-        tablero = tablero.tableroPredefinido();
-        
+        tablero = tablero.tableroPredefinido();    
         tablero.getSolucionTablero().forEach((element) -> {
            historiales.guardarSolucion(element.getFila(),element.getColumna());
         });
@@ -118,8 +110,7 @@ public class Juego {
         boolean tableroCompletado = this.tablero.verificarTablero();
         
         try {
-            if (filaValida && columnaValida || FilaColumnaRetroceso) {
-                
+            if (filaValida && columnaValida || FilaColumnaRetroceso) {               
                 if(!FilaColumnaRetroceso) {
                     String[][] tableroPrevio = tablero.getTableritoActual();
                     String[][] tableroNuevo = copiarTablero(tableroPrevio);
@@ -129,11 +120,10 @@ public class Juego {
                     aplicarMovimiento(celda, posicionFila, posicionColumna, tableroNuevo);
 
                     this.tablero.setTableritoActual(tableroNuevo);
-
                 } else {          
                     String[][] tableroPrevio = tablero.getTableritoActual();
                     String[][] tableroNuevo = copiarTablero(tableroPrevio);
-                    if(historiales.obtenerMovimientos().size() > 0) {
+                    if(!historiales.obtenerMovimientos().isEmpty()) {
                         Movimiento ultimoMovimiento = historiales.obtenerMovimientos().get(historiales.obtenerMovimientos().size() - 1);
                         String celda = tableroNuevo[ultimoMovimiento.getFila() - 1][ultimoMovimiento.getColumna() - 1];
 
@@ -143,12 +133,9 @@ public class Juego {
                         aplicarMovimiento(celda, ultimoMovimiento.getFila(), ultimoMovimiento.getColumna(), tableroNuevo);
 
                         this.tablero.setTableritoActual(tableroNuevo);
-                    } else {
-                        
-                        throw new RuntimeException("No se puede aplicar paso de retroceso. Tablero sin modificaciones:");
-                        
+                    } else {              
+                        throw new RuntimeException("No se puede aplicar paso de retroceso. Tablero sin modificaciones:");                      
                     }
-
                 }
                 
                 historiales.guardarMovimiento(fila, columna);
@@ -156,12 +143,10 @@ public class Juego {
                 this.tiempoFin = System.currentTimeMillis();
             } else {
                 throw new RuntimeException("Movimiento inválido.");
-            }
-            
+            }          
         } catch(RuntimeException e) {
             throw new RuntimeException(e.getMessage());
-        }
-        
+        }       
         return tableroCompletado;
     }
     
@@ -213,7 +198,6 @@ public class Juego {
                     }
                 }
                 break;
-            //Default ???
         }
     }
 
@@ -250,14 +234,12 @@ public class Juego {
     }
     
     private boolean existenMovimientos(int fila, int columna) {
-        boolean existe = false;
-        
+        boolean existe = false;        
         for(Movimiento unMovimiento : historiales.getSolucion()) {
             if(unMovimiento.getColumna() == columna && unMovimiento.getFila() == fila) {
                 existe = true;
             }
-        }
-        
+        } 
         return existe;
     }
 }

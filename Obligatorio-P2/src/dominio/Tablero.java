@@ -17,7 +17,6 @@ import java.util.Random;
  * Fabian Mederos 281938
  */
 public class Tablero {
-
     private int nivel;
     private String [][] tableritoActual;
     private ArrayList<Movimiento> solucionTablero;
@@ -61,75 +60,69 @@ public class Tablero {
             if (!condFilas) {
                 mensajeError += "- Cantidad de filas inválida (entre 3 y 9).\n";
             }
-
             if (!condCols) {
                  mensajeError += "- Cantidad de columnas inválida (entre 3 y 9).\n";
             }
-
             if (!condNivel) {
                 mensajeError += "- Nivel inválido (entre 1 y 8).\n";
             }
-
             throw new RuntimeException(mensajeError);
         }
         return valido;
-    }
-    
+    } 
 
     public void setTableritoActual(String[][] untablero) {
        this.tableritoActual = untablero;
     }
-    
-
-    
+   
     public String[][] getTableritoActual() {
         return this.tableritoActual;
     }
     
-   public Tablero tableroDesdeArchivo() throws FileNotFoundException {
-            // Abrir el archivo "datos.txt" para lectura
-            Scanner input = new Scanner(new File("C:\\Users\\User\\OneDrive\\Documentos\\NetBeansProjects\\Obligatorio-P2.1\\Obligatorio-P2\\src\\interfaz\\datos.txt"));
+    public Tablero tableroDesdeArchivo() throws FileNotFoundException {
+        // Abrir el archivo "datos.txt" para lectura
+        Scanner input = new Scanner(new File(".\\Test\\datos.txt"));
 
-            // Leer las dimensiones del tablero (m filas x n columnas)
-            int m = input.nextInt();
-            int n = input.nextInt();
-            input.nextLine(); // Leer el salto de línea después de las dimensiones
+        // Leer las dimensiones del tablero (m filas x n columnas)
+        int m = input.nextInt();
+        int n = input.nextInt();
+        input.nextLine(); // Leer el salto de línea después de las dimensiones
 
-            // Crear el tablero con las dimensiones especificadas
-            String[][] tablero = new String[m][n];
-            // Leer el contenido del tablero y asignar colores
-            for (int fila = 0; fila < m; fila++) {
-                String filaTablero = input.nextLine();
-                String[] simbolos = filaTablero.split(" "); // Divide la fila en símbolos
-                
-                for (int columna = 0; columna < n; columna++) {
-                    String simbolo = simbolos[columna]; 
-                    // Agregar el símbolo al tablero con el color correspondiente
-                    tablero[fila][columna] = simbolo; // Resetear color
-                }
+        // Crear el tablero con las dimensiones especificadas
+        String[][] tablero = new String[m][n];
+        // Leer el contenido del tablero y asignar colores
+        for (int fila = 0; fila < m; fila++) {
+            String filaTablero = input.nextLine();
+            String[] simbolos = filaTablero.split(" "); // Divide la fila en símbolos
+
+            for (int columna = 0; columna < n; columna++) {
+                String simbolo = simbolos[columna]; 
+                // Agregar el símbolo al tablero con el color correspondiente
+                tablero[fila][columna] = simbolo; // Resetear color
             }
-            int nivel = input.nextInt();
-            
-            ArrayList<Movimiento> aux = new ArrayList<>();
-            
-            for(int i = 0; i < nivel; i++) {
-                int fila = input.nextInt();
-                int columna = input.nextInt();
-                Movimiento movimiento = new Movimiento(fila,columna);
-                aux.add(movimiento);
-            }
-            
-            // Cerrar el archivo
-            input.close();
-            
-            Tablero t = new Tablero(m, n, nivel);
-            t.setSolucionTablero(aux);
-            t.setTableritoActual(tablero);
-            
-            return t;
+        }
+        int nivel = input.nextInt();
+
+        ArrayList<Movimiento> aux = new ArrayList<>();
+
+        for(int i = 0; i < nivel; i++) {
+            int fila = input.nextInt();
+            int columna = input.nextInt();
+            Movimiento movimiento = new Movimiento(fila,columna);
+            aux.add(movimiento);
+        }
+
+        // Cerrar el archivo
+        input.close();
+
+        Tablero t = new Tablero(m, n, nivel);
+        t.setSolucionTablero(aux);
+        t.setTableritoActual(tablero);
+
+        return t;
     }
     
-    public static Tablero tableroPredefinido() {                
+    public Tablero tableroPredefinido() {                
         String[][] tablero = {
             {"|A", "|A", "-R", "/A", "|R", "-R"},
             {"-R", "/A", "/A", "|A", "-R", "-R"},
@@ -193,8 +186,6 @@ public class Tablero {
         }
         tablero.setTableritoActual(tableroActual);
 
-
         return tablero;
-    }
-     
+    }    
 }

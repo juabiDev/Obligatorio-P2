@@ -26,8 +26,7 @@ public class Movimiento {
     public int getColumna() {
         return this.columna;
     }
-    
-    
+     
     public Movimiento(int fila, int columna) {
         this.fila = fila;
         this.columna = columna;
@@ -42,6 +41,5 @@ public class Movimiento {
     public boolean equals(Object obj) {
         Movimiento otroObjeto = (Movimiento) obj;
         return this.getFila() == otroObjeto.getFila() && this.getColumna() == otroObjeto.getColumna();
-    }
-    
+    } 
 }
