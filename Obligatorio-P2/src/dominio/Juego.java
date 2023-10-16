@@ -148,7 +148,7 @@ public class Juego {
             aplicarMovimiento(
               celda,
               ultimoMovimiento.getFila() - 1,
-              ultimoMovimiento.getFila() - 1,
+              ultimoMovimiento.getColumna() - 1,
               tableroNuevo
             );
 

@@ -23,10 +23,9 @@ public class Historial {
   }
 
   public void agregarMovimiento(Movimiento movimiento) {
-    boolean existeEnSolucion = false;
-
+    //boolean existeEnSolucion = false;
     if (movimiento.getColumna() == -1 && movimiento.getFila() == -1) {
-      if (!this.obtenerMovimientos().isEmpty()) {
+      /* if (!this.obtenerMovimientos().isEmpty()) {
         Movimiento ultimoMovimientoHistorial =
           this.obtenerMovimientos().get(obtenerMovimientos().size() - 1);
 
@@ -51,11 +50,11 @@ public class Historial {
       // Si el ultimo elemento del historial no es parte de la solucion, borramos el ultimo elemento de la solucion
       if (!existeEnSolucion) {
         solucion.remove(solucion.size() - 1);
-      }
+      } */
 
       movimientos.remove(movimientos.size() - 1);
     } else {
-      solucion.add(movimiento);
+      //solucion.add(movimiento);
       movimientos.add(movimiento);
     }
   }
@@ -69,7 +68,7 @@ public class Historial {
   }
 
   public ArrayList<Movimiento> getSolucion() {
-    ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
+   /* ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
 
     ArrayList<Movimiento> copiaSolucionSinRepetidos = new ArrayList<>();
 
@@ -87,7 +86,36 @@ public class Historial {
         copiaSolucionSinRepetidos.add(unMovimiento);
       }
     }
-    return copiaSolucionSinRepetidos;
+    return copiaSolucionSinRepetidos; */
+   
+    ArrayList<Movimiento> respuestaSolucion = new ArrayList<>();
+    //Agrego movimientos sobrantes (estan en historial pero no en solucion) a la solucion
+    for (int i = 0; i < this.movimientos.size(); i++) {
+        if (!this.solucion.contains(this.movimientos.get(i)) && !respuestaSolucion.contains(this.movimientos.get(i))) {
+            int contador = 0;
+            for (int j = 0; j < this.movimientos.size(); j++) {
+                if (this.movimientos.get(j).equals(this.movimientos.get(i))) {
+                    contador++;
+                }
+            }
+            if ((contador % 2) != 0) {
+                respuestaSolucion.add(this.movimientos.get(i));
+            }
+        }
+    }  
+    //Agrego a la solucion los movimientos de historial que estan par veces
+    for (int i = 0; i < this.solucion.size(); i++) {
+        int contador = 0;
+        for (int j = 0; j < this.movimientos.size(); j++) {
+            if (this.movimientos.get(j).equals(this.solucion.get(i))) {
+                contador++;
+            }
+        }
+        if ((contador % 2) == 0) {
+            respuestaSolucion.add(this.solucion.get(i));
+        }
+    }
+    return respuestaSolucion;
   }
 
   public void guardarMovimiento(int fila, int columna) {
