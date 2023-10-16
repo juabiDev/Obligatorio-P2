@@ -142,8 +142,8 @@ public class Sistema {
           mensajeFinal = "Tiempo de partida: " + juego.obtenerTiempoTotal();
           break;
         case "h":
-          if (!juego.obtenerHistorialMovimientos().isEmpty()) {
-            consola.imprimirMovimientos(juego.obtenerHistorialMovimientos());
+          if (!historiales.obtenerMovimientos().isEmpty()) {
+            consola.imprimirMovimientos(historiales.obtenerMovimientos());
             System.out.println();
           } else {
             System.out.println("No se ha realizado ningún movimiento válido");

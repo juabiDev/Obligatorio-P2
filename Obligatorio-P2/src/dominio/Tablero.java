@@ -147,25 +147,6 @@ public class Tablero {
     return t;
   }
 
-  public boolean verificarTablero() {
-    String[][] tabla = this.tableritoActual;
-    String color = String.valueOf(tabla[0][0].charAt(1));
-    boolean retorno = true;
-
-    for (int i = 0; i < tabla.length; i++) {
-      for (int j = 0; j < tabla[0].length; j++) {
-        String celda = tabla[i][j];
-        String colorActual = String.valueOf(celda.charAt(1));
-
-        if (!colorActual.equals(color)) {
-          retorno = false;
-        }
-      }
-    }
-
-    return retorno;
-  }
-
   public Tablero tableroAleatorio(int filas, int columnas, int nivel) {
     Tablero tablero = new Tablero(filas, columnas, nivel);
     Random rand = new Random();
@@ -186,5 +167,24 @@ public class Tablero {
     tablero.setTableritoActual(tableroActual);
 
     return tablero;
+  }
+  
+  public boolean verificarTablero() {
+    String[][] tabla = this.tableritoActual;
+    String color = String.valueOf(tabla[0][0].charAt(1));
+    boolean retorno = true;
+
+    for (int i = 0; i < tabla.length; i++) {
+      for (int j = 0; j < tabla[0].length; j++) {
+        String celda = tabla[i][j];
+        String colorActual = String.valueOf(celda.charAt(1));
+
+        if (!colorActual.equals(color)) {
+          retorno = false;
+        }
+      }
+    }
+
+    return retorno;
   }
 }

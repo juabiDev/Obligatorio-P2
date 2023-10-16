@@ -5,14 +5,13 @@
 package dominio;
 
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
 import java.util.Random;
 
 /**
  *
  * @author
  * Dana Cizin 239510
- * Fabian Mederos 281938
+ * Fabian Mederos 28193
  */
 public class Juego {
 
@@ -37,14 +36,8 @@ public class Juego {
   }
 
   /* --- Tiempo de Juego --- */
-
-  public void iniciarJuego() {
-    tiempoInicio = System.currentTimeMillis();
-  }
-
   public String obtenerTiempoTotal() {
     long tiempoTotalSegundos = (tiempoFin - tiempoInicio) / 1000;
-
     long horas = tiempoTotalSegundos / 3600;
     long minutos = (tiempoTotalSegundos % 3600) / 60;
     long segundos = tiempoTotalSegundos % 60;
@@ -59,14 +52,7 @@ public class Juego {
     return tiempoTotalFormato;
   }
 
-  /* --- Historiales desde Sistema --- */
-
-  public ArrayList obtenerHistorialMovimientos() {
-    return historiales.obtenerMovimientos();
-  }
-
   /* --- Creación de Tableros --- */
-
   public void crearTableroDeArchivo() throws FileNotFoundException {
     tablero = tablero.tableroDesdeArchivo();
 
@@ -110,7 +96,6 @@ public class Juego {
   }
 
   /* --- Jugabilidad --- */
-
   public boolean jugar(int fila, int columna) {
     int posicionFila = fila - 1;
     int posicionColumna = columna - 1;
@@ -233,7 +218,6 @@ public class Juego {
   }
 
   /* --- Funciones Auxiliares --- */
-
   private String[][] copiarTablero(String[][] unTablero) {
     String[][] retorno = new String[unTablero.length][unTablero[0].length];
 

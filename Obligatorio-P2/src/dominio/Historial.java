@@ -21,75 +21,14 @@ public class Historial {
     this.solucion = new ArrayList<>();
     this.movimientos = new ArrayList<>();
   }
-
-  public void agregarMovimiento(Movimiento movimiento) {
-    //boolean existeEnSolucion = false;
-    if (movimiento.getColumna() == -1 && movimiento.getFila() == -1) {
-      /* if (!this.obtenerMovimientos().isEmpty()) {
-        Movimiento ultimoMovimientoHistorial =
-          this.obtenerMovimientos().get(obtenerMovimientos().size() - 1);
-
-        for (int i = 0; i < this.solucion.size(); i++) {
-          // Verificamos si ese ultimo movimiento es parte de la solución
-
-          if (
-            solucion.get(i).getColumna() ==
-            ultimoMovimientoHistorial.getColumna() &&
-            solucion.get(i).getFila() == ultimoMovimientoHistorial.getFila()
-          ) {
-            // puede haber mas de un elemento, pero en caso de retroceder hay que borrar solo uno
-
-            if (!existeEnSolucion) {
-              existeEnSolucion = true;
-              this.solucion.remove(i);
-            }
-          }
-        }
-      }
-
-      // Si el ultimo elemento del historial no es parte de la solucion, borramos el ultimo elemento de la solucion
-      if (!existeEnSolucion) {
-        solucion.remove(solucion.size() - 1);
-      } */
-
-      movimientos.remove(movimientos.size() - 1);
-    } else {
-      //solucion.add(movimiento);
-      movimientos.add(movimiento);
-    }
-  }
-
+  
   public ArrayList<Movimiento> obtenerMovimientos() {
     return movimientos;
   }
 
-  public void agregarSolucion(Movimiento movimiento) {
-    solucion.add(movimiento);
-  }
-
   public ArrayList<Movimiento> getSolucion() {
-   /* ArrayList<Movimiento> copiaSolucion = new ArrayList<>(solucion);
-
-    ArrayList<Movimiento> copiaSolucionSinRepetidos = new ArrayList<>();
-
-    for (int i = 0; i < copiaSolucion.size(); i++) {
-      Movimiento unMovimiento = copiaSolucion.get(i);
-      boolean sonIguales = false;
-      for (int j = 0; j < copiaSolucion.size(); j++) {
-        Movimiento otroMovimiento = copiaSolucion.get(j);
-        if (unMovimiento.equals(otroMovimiento) && i != j) {
-          sonIguales = true;
-        }
-      }
-
-      if (!sonIguales) {
-        copiaSolucionSinRepetidos.add(unMovimiento);
-      }
-    }
-    return copiaSolucionSinRepetidos; */
-   
     ArrayList<Movimiento> respuestaSolucion = new ArrayList<>();
-    //Agrego movimientos sobrantes (estan en historial pero no en solucion) a la solucion
+    //Agregamos movimientos sobrantes (estan en historial pero no en solucion) a la solucion
     for (int i = 0; i < this.movimientos.size(); i++) {
         if (!this.solucion.contains(this.movimientos.get(i)) && !respuestaSolucion.contains(this.movimientos.get(i))) {
             int contador = 0;
@@ -103,7 +42,7 @@ public class Historial {
             }
         }
     }  
-    //Agrego a la solucion los movimientos de historial que estan par veces
+    //Agregamos a la solucion los movimientos de historial que estan par veces
     for (int i = 0; i < this.solucion.size(); i++) {
         int contador = 0;
         for (int j = 0; j < this.movimientos.size(); j++) {
@@ -120,19 +59,15 @@ public class Historial {
 
   public void guardarMovimiento(int fila, int columna) {
     Movimiento m = new Movimiento(fila, columna);
-    guardarHistorialMov(m);
-  }
-
-  private void guardarHistorialMov(Movimiento m) {
-    agregarMovimiento(m);
+    if (m.getColumna() == -1 && m.getFila() == -1) {
+      movimientos.remove(movimientos.size() - 1);
+    } else {
+      movimientos.add(m);
+    }
   }
 
   public void guardarSolucion(int fila, int columna) {
     Movimiento m = new Movimiento(fila, columna);
-    guardarHistorialSol(m);
-  }
-
-  private void guardarHistorialSol(Movimiento m) {
-    agregarSolucion(m);
+    solucion.add(m);
   }
 }
